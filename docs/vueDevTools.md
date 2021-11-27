@@ -1,6 +1,6 @@
 ---
 date: 2021-09-14
-title: 瘦虎 |【源码第一期】Vue-DevTools部分源码阅读
+title: 【源码第一期】Vue-DevTools部分源码阅读
 tags:
   - 源码
 describe: 浅析 Vue-DevTools--打开组件功能
