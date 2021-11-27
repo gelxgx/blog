@@ -14,11 +14,12 @@
         // clientSecret
         clientSecret: "ae7841b520456eb854421561a0efa7500a99567b",
         // 评论项目名
-        repo: 'blog-comments',
+        repo: 'blog',
         owner: 'gelxgx',
         admin: ['gelxgx'],
-        githubID:'gelxgx',
+        // githubID:'gelxgx',
         id: decodeURI(window.location.pathname),
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
         language:'zh-CN',
         distractionFreeMode: true
       };
