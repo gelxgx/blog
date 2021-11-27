@@ -111,7 +111,7 @@ export default {
           },
           {
             icon: "icon-github",
-            link: "https://github.com/jexlau",
+            link: "https://github.com/gelxgx",
             event: false,
           },
         ],
