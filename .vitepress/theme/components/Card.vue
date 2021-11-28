@@ -64,6 +64,9 @@ export default {
       this.modalUrl = url;
       this.showModal = true;
     },
+    getMagnify() {
+      console.log(111);
+    }
   },
   created() { },
   mounted() { },
