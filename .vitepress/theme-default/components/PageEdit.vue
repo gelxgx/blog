@@ -18,11 +18,13 @@
 
 <script>
 import juejin from "../../images/juejin.png"
+import yuque from "../../images/yuque.png"
 export default {
   setup() {
     const data = {
       platform: [
         { href: "https://juejin.cn/user/465848663286712", icon: juejin },
+        { href: "https://www.yuque.com/shouhu-pelkv", icon: yuque}
       ]
     }
     return {
