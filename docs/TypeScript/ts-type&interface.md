@@ -3,7 +3,7 @@ date: 2021-11-24
 title: 【TypeScript第一期】基础类型与接口
 tags:
   - TypyScript
-describe: 学习TS 基础类型与接口 
+describe: 学习 TS基础类型与接口 
 ---
 
 ### 1. 食用Typescript
