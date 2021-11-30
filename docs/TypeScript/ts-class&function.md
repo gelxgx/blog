@@ -1,9 +1,9 @@
 ---
 date: 2021-11-30
-title: 【TypeScript第二期】类与函数
+title: 【TypeScript第二期】类、函数、泛型、枚举
 tags:
   - TypyScript
-describe: 学习 TS类与函数
+describe: 学习 TS类、函数、泛型、枚举
 ---
 
 ### 1.类
@@ -322,5 +322,152 @@ function reverse(x: number | string): number | string | void {
     } else if (typeof x === 'string') {
         return x.split('').reverse().join('');
     }
+}
+```
+
+### 3. 泛型
+
+泛型为了解决当我们在定义函数、接口、类时，对不确定类型的传入参数，进行类型指定和保护，确保定义、返回值的类型是统一的。
+
+#### 3.1 基础写法
+
+对于一个参数的写法，是下面这样的基础写法
+
+```
+function test<T>(name: T):T {
+	return name
+}
+```
+
+也可以通过定义参数的方式声明泛型函数
+
+```
+let myTest: <T>(name: T) => T = test
+```
+
+\
+
+
+当需要定义多个类型时，同样也可以定义多个泛型：
+
+```
+function testArr<T,U>(arr: [T,U]):[U,T] {
+	return [arr[1], arr[0]]
+}
+```
+
+#### 3.2 泛型约束
+
+可以通过创建一个接口描述泛型的约束条件，并通过`extends`继承方式来实现约束
+
+```
+interface Lengthwise {
+	length: number
+}
+function cLength<T extends Lengthwise>(num: T): T {
+	console.log(num.length)
+}
+
+cLength({length:10, value: 3})
+```
+
+由于使用了`extends`约束泛型`T`必须符合接口 Lengthwise 的形状，所以传入的参数必须包含 `length` 属性
+
+同样可以实现多个参数的相互约束
+
+```
+function getProperty(obj: T, key: K) {
+    return obj[key];
+}
+
+let x = { a: 1, b: 2, c: 3, d: 4 };
+getProperty(x, "a")
+```
+
+#### 3.3 泛型类
+
+同样泛型可以在类中进行定义
+
+```
+class GenericNumber<T> {
+    zeroValue: T;
+    add: (x: T, y: T) => T;
+}
+
+let myGenericNumber = new GenericNumber<number>();
+myGenericNumber.zeroValue = 0;
+myGenericNumber.add = function(x, y) { return x + y; };
+```
+
+###
+
+###
+
+### 4.枚举
+
+枚举又被分为四类：
+
+-   数字枚举
+-   字符串枚举
+
+<!---->
+
+-   常数枚举
+-   外部枚举
+
+#### 4.1 数字枚举
+
+通过使用`enum`定义一个枚举
+
+```
+enum Direction {
+    Up,
+    Down,
+    Left,
+    Right
+}
+```
+
+访问枚举时，可以通过枚举的属性、名字来访问枚举类型
+
+##### 4.2 字符串枚举
+
+```
+enum Direction {
+    Up = "UP",
+    Down = "DOWN",
+    Left = "LEFT",
+    Right = "RIGHT",
+}
+```
+
+\
+
+
+#### 4.3 常数枚举
+
+使用`const enum`代表常数枚举，常数枚举与普通枚举的区别是，它会在编译阶段被删除，并且不能包含计算成员
+
+```
+const enum Directions {
+    Up,
+    Down,
+    Left,
+    Right
+}
+```
+
+####
+
+#### 4.4 外部枚举
+
+使用`declare`定义外部枚举，它只会用于编译时的检查，编译结果中会被删除
+
+```
+declare enum Directions {
+    Up,
+    Down,
+    Left,
+    Right
 }
 ```
