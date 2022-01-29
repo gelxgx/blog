@@ -9,10 +9,12 @@
     "deploy": "./deploy.sh"
   },
   "devDependencies": {
+    "cross-env": "7.0.3",
     "globby": "11.0.1",
     "gray-matter": "4.0.2",
     "mz": "2.7.0",
-    "cross-env": "7.0.3",
     "vitepress": "0.7.2"
-  }
+  },
+  "repository": "https://github.com/gelxgx/blog.git",
+  "author": "gelxgx <568742232@qq.com>"
 }
