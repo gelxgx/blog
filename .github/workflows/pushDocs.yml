@@ -28,7 +28,7 @@ jobs:
           node-version:  ${{ matrix.node }}
           
       - name: Install dependencies
-        run: yard init
+        run: yarn init
         
       - name: Build VuePress
         run: npm run build
