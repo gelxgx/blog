@@ -1,6 +1,6 @@
 ---
 date: 2021-11-30
-title: 【【源码计划第七期】mitt、tiny-emitter 发布订阅
+title: 【源码计划第七期】mitt、tiny-emitter 发布订阅
 tags:
   - 源码
 describe: 认识发布订阅模式
