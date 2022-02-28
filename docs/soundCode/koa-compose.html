@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>
+      【源码第四期】理解koa-compose | 瘦虎
+    </title>
+    <meta name="description" content="A VitePress site">
+    <link rel="stylesheet" href="/blog/_assets/style.822f840d.css">
+    <link rel="modulepreload" href="/blog/_assets/common-1984dd55.js">
+    <link rel="modulepreload" href="/blog/_assets/docs_soundCode_koa-compose.md.f6f000ab.lean.js">
+    <link rel="modulepreload" href="/blog/_assets/app.9e239910.js">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="keywords" content="瘦虎">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="stylesheet" href="https://lib.baomitu.com/gitalk/1.7.0/gitalk.min.css">
+    <script src="https://lib.baomitu.com/gitalk/1.7.0/gitalk.min.js"></script>
+    <script src="https://lib.baomitu.com/axios/0.21.1/axios.js"></script>
+    
+  </head>
+  <body>
+    <div id="app"><!--[--><div id="containerColor" class="no-sidebar theme" data-v-1eb0b654><header class="navbar" data-v-1eb0b654><!--[--><a class="title" aria-label="瘦虎, back to home" href="/blog/"><img class="logo" src="/blog/favicon.ico" alt="logo"><span>瘦虎</span></a><div class="flex-grow"></div><nav class="nav-links hide-mobile"><!--[--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/index.html" target="" rel="">🏠 首页<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/docs.html" target="" rel="">📅 归档<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/tags.html" target="" rel="">📂 分类<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/Friendship.html" target="" rel="">👫 友情链接<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--]--><!----><!----></nav><!--[--><!--]--><!--]--><div class="sidebar-button" data-v-1eb0b654><svg class="icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z" class></path></svg></div></header><aside class="" data-v-1eb0b654><!--[--><nav class="nav-links show-mobile"><!--[--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/index.html" target="" rel="">🏠 首页<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/docs.html" target="" rel="">📅 归档<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/tags.html" target="" rel="">📂 分类<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/Friendship.html" target="" rel="">👫 友情链接<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--]--><!----><!----></nav><!--[--><!--]--><ul class="sidebar"><!--[--><!--]--></ul><!--[--><!--]--><!--]--></aside><!----><!-- TODO: make this button accessible --><div class="sidebar-mask" data-v-1eb0b654></div><main data-v-1eb0b654><!--[--><div class="content"><!--[--><!--]--><div class="md-header"><div class="md-title">【源码第四期】理解koa-compose</div><span id="jinrishici-sentence">正在加载今日诗词....</span><div class="md-date">2021-11-08</div></div><ul class="catalog"><!--[--><li class="catalog-item"><!----><a class="level level-3" href="#_1-阅读前准备">1. 阅读前准备</a></li><li class="catalog-item"><!----><a class="level level-3" href="#_2-学习目标">2. 学习目标</a></li><li class="catalog-item"><!----><a class="level level-3" href="#_3-开始阅读">3.开始阅读</a></li><li class="catalog-item"><!----><a class="level level-3" href="#_4-总结">4.总结</a></li><!--]--></ul><div><blockquote><p>非常感谢若川大佬的阅读源码活动，原文：<a href="https://juejin.cn/post/7005375860509245471" target="_blank" rel="noopener noreferrer">https://juejin.cn/post/7005375860509245471</a></p></blockquote><h3 id="_1-阅读前准备"><a class="header-anchor" href="#_1-阅读前准备" aria-hidden="true">#</a> 1. 阅读前准备</h3><p>在阅读之前有简单的了解过koa,以及中间件的执行过程，并且也在上一期活动中通过CO源码的阅读，加深了next()函数的执行原理。今天看看koa-compoes做了一些什么操作。</p><h3 id="_2-学习目标"><a class="header-anchor" href="#_2-学习目标" aria-hidden="true">#</a> 2. 学习目标</h3><p>本次阅读学习主要有以下几个目标：</p><ul><li>阅读源码，了解代码意义</li><li>对比co源码，解决了什么问题</li></ul><h3 id="_3-开始阅读"><a class="header-anchor" href="#_3-开始阅读" aria-hidden="true">#</a> 3.开始阅读</h3><p>koa-compose项目主要分为两部分：</p><ul><li>jest的test测试用例部分</li><li>index.js koa-compose主文件</li></ul><p>直接进入index.js 开读！</p><p>这里只有短短不到50行的代码，compose函数结构上看，通过闭包的形式完成了整个功能</p><p>具体代码如下：</p><p>这里分为两部分：</p><ul><li>第一部分校验参数</li><li>第二部分接收参数并返回Promise</li></ul><div class="language-"><pre><code>function compose (middleware) {
+  if (!Array.isArray(middleware)) throw new TypeError(&#39;Middleware stack must be an array!&#39;)
+  for (const fn of middleware) {
+    if (typeof fn !== &#39;function&#39;) throw new TypeError(&#39;Middleware must be composed of functions!&#39;)
+  }
+
+  /**
+   * @param {Object} context
+   * @return {Promise}
+   * @api public
+   */
+
+  return function (context, next) {
+    // last called middleware #
+    let index = -1
+    return dispatch(0)
+    function dispatch (i) {
+    }
+  }
+}
+</code></pre></div><p>第一部分很好理解，首先对接收到的参数进行两次判断：</p><ul><li>如果这个参数不是数组，则抛出错误</li><li>如果这个数组参数中的每一项都不是函数时，则抛出错误</li></ul><!----><ul><li>如果这个参数是数组，且数组中的每一项都是函数时，则继续往下执行dispatch函数</li></ul><div class="language-"><pre><code>function dispatch (i) {
+      if (i &lt;= index) return Promise.reject(new Error(&#39;next() called multiple times&#39;))
+      index = i
+      let fn = middleware[i]
+      if (i === middleware.length) fn = next
+      if (!fn) return Promise.resolve()
+      try {
+        return Promise.resolve(fn(context, dispatch.bind(null, i + 1)))
+      } catch (err) {
+        return Promise.reject(err)
+      }
+    }
+</code></pre></div><p>dispatch函数做了以下这些事：</p><ul><li>首先判断是否存在next()多次调用的情况，如果存在则会直接报错</li><li>接着陆续取出middlewatre中的第1、2、3...个函数并开始执行</li></ul><!----><ul><li>如果检测到为最后一个时，next为undefined，此时fn不是函数，直接返回resolve</li><li>如果不是最后一个，则也会返回一个resolve，但resolve内容是取到下一个middleware中的函数</li></ul><!----><ul><li>当执行到next()函数时，会重新return进入dispatch函数内部，继续执行下一个函数</li><li>直到最后一个函数时，fn为undefined，直接resolve</li></ul><p>一句话总结：嵌套调用Promise.resolve，往里深入，执行完毕后，从底部再重新往上执行</p><p>于是我简化了一下compose，这样能更方便理解：</p><div class="language-"><pre><code>const [t1, t2, t3] = stack;
+const testC = function(context){
+    await Promise.resolve(
+      t1(context, function next(){
+        return Promise.resolve(
+          t2(context, function next(){
+              return Promise.resolve(
+                  t3(context, function next(){
+                    return Promise.resolve();
+                  })
+              )
+          })
+        )
+    })
+  );
+};
+</code></pre></div><h3 id="_4-总结"><a class="header-anchor" href="#_4-总结" aria-hidden="true">#</a> 4.总结</h3><p>虽然koa-compose源码不多，但设计非常精巧，一个</p><p><code>return Promise.resolve(fn(context, dispatch.bind(null, i + 1)))</code></p><p>就将所有的中间件串联了起来</p><p>我也能加深对中间件的理解，以前只知道怎么使用，现在可以知道这其中的原理。</p><h4 id="_4-1-与co的对比"><a class="header-anchor" href="#_4-1-与co的对比" aria-hidden="true">#</a> 4.1 与co的对比</h4><p>相同点：</p><p>co与koa-compose都同样通过使用promise完成了串联和调用。</p><p>不同点：</p><p>co传入的是一个<code>generator</code>，koa-compose传入的是一个普通函数</p><p>co通过promise自动执行<code>generator</code>的next函数，koa-compose则是通过一个闭包，将promise嵌套在内部并执行</p></div><div class="links-wrapper"><div class="prev-link"><!----></div><div class="next-link"><!----></div></div><div><footer class="page-edit"><!--[--><a href="https://juejin.cn/user/465848663286712"><img class="imgIcon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAABfVBMVEX///8Ad/8AgP8AgP8AgP8Aff8AgP8Af/8AgP8AVf8Af/8Af/8AgP8AgP8Af/8Afv8AAP8Afv8Afv8Aef8AgP8AdP8Afv8AgP8AgP8Acf8Ae/8AgP8Af/8AgP8Af/8Af/8AfP8Afv8AgP8Af/8Af/8Afv8Afv8AgP8Afv8AgP8Af/8Af/8AgP8AgP8Afv8AgP8Af/8AgP8AgP8AgP8Ae/8Afv8Af/8AgP8Af/8AgP8Af/8Af/8Aff8Af/8Abf8AgP8Af/8AgP8Af/8Af/8Afv8AgP8AgP8Afv8Afv8AgP8Af/8Aff8AgP8Afv8AgP8Aff8AgP8AfP8AgP8Ae/8AgP8Af/8AgP8AgP8AgP8Afv8AgP8AgP8AgP8Afv8AgP8AgP8AgP8AgP8AgP8Af/8AgP8Af/8Af/8Aev8Af/8AgP8Aff8Afv8AgP8AgP8AgP8Af/8AgP8Af/8Af/8AgP8Afv8AgP8AgP8AgP8AgP8Af/8AeP8Af/8Af/8Af//////rzEHnAAAAfXRSTlMAD7CCAivatxIDx5EMrP19AXdLEwgLR+6iCR/M0yLRzyFF7JupSXn8cw6v60Q0QeqzKtgeG237HMne850/6Qeq7QaZ+WdydHtj+OM3qENCMRYl1B3K2U7wnlWE/mhlirjkODa9FN/BF7/iNV/2kASNZpX1Wlf03C4stRGxgUPclqoAAAABYktHRACIBR1IAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4gEaBzgZ4yeM3AAAAT9JREFUOMvNUldbwkAQvCAqsSBoABE7asSOBRUVVBQNNuy9996789+9cMFAMHnVebmdm+/bmdtbQv4dOFOW2UjPzgFyLfo6nweKfIMOBYWwFtmMPGz2Yj2pJI0JDq3udJW6VVbmKa9I192VQFV1ktXUAl5NB0cd4KpnORqsEO2ZIRpF9gJfE9Dckqq0KuZt7UAH5+8EPF3spjsRpCeQNO/tA/qDwIDA+OCQbBoKA8NOdjMySgcZGVM6jwcgRuUiSs0nlPFNSrEpJfU0jTLD6llqbvKxei7OzvkFNQohi0vAsj81+MoqsCaoPOQFgus/1LyxichW+hS2JWCHZ7VlF9jb187pIAYcHiViHAMnp5mTjJ8B5xeEXF4B1ze/fTh/C0h398DDI9HB07O8ci+vRBdvdGnfP4gBuM8vw7X/G3wDmFhFZEdxzjMAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTgtMDEtMjZUMDc6NTY6MjUrMDE6MDA67pVWAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE4LTAxLTI2VDA3OjU2OjI1KzAxOjAwS7Mt6gAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAAWdEVYdFRpdGxlAGp1ZWppbl9sb2dvIGNvcHlxapmKAAAAV3pUWHRSYXcgcHJvZmlsZSB0eXBlIGlwdGMAAHic4/IMCHFWKCjKT8vMSeVSAAMjCy5jCxMjE0uTFAMTIESANMNkAyOzVCDL2NTIxMzEHMQHy4BIoEouAOoXEXTyQjWVAAAAAElFTkSuQmCC"></a><a href="https://www.yuque.com/shouhu-pelkv"><img class="imgIcon" src="/blog/_assets/yuque.2a316201.png"></a><!--]--></footer><p class="platform"> 以上皆为 <a href="javascript:;">瘦虎</a> 文章发布平台 </p><p class="platform"> Copyright © 2020-2021 <a href="https://github.com/gelxgx">@Gelxgx</a></p></div><!--[--><!--]--></div><!-- 只想点击背景才关闭 请使用 .self 修饰符 --><div style="display:none;" class="imgBox"><img src=""></div><!--]--></main><div class="theme-select" data-v-1eb0b654><ul data-v-1eb0b654><li class="active" data-v-1eb0b654>☀️</li><li class="" data-v-1eb0b654>🌑</li></ul></div></div><!----><!--]--></div>
+    <script>__VP_HASH_MAP__ = JSON.parse("{\"README.md\":\"56ed425b\",\"index.md\":\"1783787d\",\"more_Friendship.md\":\"0d404086\",\"more_docs.md\":\"c4c7f0eb\",\"more_index.md\":\"350c9b6f\",\"more_tags.md\":\"36c4af96\",\"docs_HTTP_HTTP.md\":\"a018e2b2\",\"docs_React_react.md\":\"3700d50c\",\"docs_TypeScript_ts-class-function.md\":\"47de5c14\",\"docs_TypeScript_ts-type-interface.md\":\"4b859e67\",\"docs_arithmetic_arithmetic.md\":\"c0bf1668\",\"docs_soundCode_co.md\":\"17fa0c9b\",\"docs_soundCode_creat-vue.md\":\"782b5c9a\",\"docs_soundCode_koa-compose.md\":\"f6f000ab\",\"docs_soundCode_mitt-tiny-emitter.md\":\"764ec47d\",\"docs_soundCode_update-notifier.md\":\"342ac959\",\"docs_soundCode_validate-npm-package-name.md\":\"b739095c\",\"docs_soundCode_vite.md\":\"947ae370\",\"docs_soundCode_vue20tools.md\":\"8cbc77c4\",\"docs_soundCode_vueDevTools.md\":\"ec3412ef\"}")</script>
+    <script type="module" async src="/blog/_assets/app.9e239910.js"></script>
+  </body>
+</html>

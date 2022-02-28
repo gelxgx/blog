@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>
+      【源码第三期】简单理解co源码及实现 | 瘦虎
+    </title>
+    <meta name="description" content="A VitePress site">
+    <link rel="stylesheet" href="/blog/_assets/style.822f840d.css">
+    <link rel="modulepreload" href="/blog/_assets/common-1984dd55.js">
+    <link rel="modulepreload" href="/blog/_assets/docs_soundCode_co.md.17fa0c9b.lean.js">
+    <link rel="modulepreload" href="/blog/_assets/app.9e239910.js">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="keywords" content="瘦虎">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="stylesheet" href="https://lib.baomitu.com/gitalk/1.7.0/gitalk.min.css">
+    <script src="https://lib.baomitu.com/gitalk/1.7.0/gitalk.min.js"></script>
+    <script src="https://lib.baomitu.com/axios/0.21.1/axios.js"></script>
+    
+  </head>
+  <body>
+    <div id="app"><!--[--><div id="containerColor" class="no-sidebar theme" data-v-1eb0b654><header class="navbar" data-v-1eb0b654><!--[--><a class="title" aria-label="瘦虎, back to home" href="/blog/"><img class="logo" src="/blog/favicon.ico" alt="logo"><span>瘦虎</span></a><div class="flex-grow"></div><nav class="nav-links hide-mobile"><!--[--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/index.html" target="" rel="">🏠 首页<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/docs.html" target="" rel="">📅 归档<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/tags.html" target="" rel="">📂 分类<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/Friendship.html" target="" rel="">👫 友情链接<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--]--><!----><!----></nav><!--[--><!--]--><!--]--><div class="sidebar-button" data-v-1eb0b654><svg class="icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z" class></path></svg></div></header><aside class="" data-v-1eb0b654><!--[--><nav class="nav-links show-mobile"><!--[--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/index.html" target="" rel="">🏠 首页<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/docs.html" target="" rel="">📅 归档<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/tags.html" target="" rel="">📂 分类<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/Friendship.html" target="" rel="">👫 友情链接<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--]--><!----><!----></nav><!--[--><!--]--><ul class="sidebar"><!--[--><!--]--></ul><!--[--><!--]--><!--]--></aside><!----><!-- TODO: make this button accessible --><div class="sidebar-mask" data-v-1eb0b654></div><main data-v-1eb0b654><!--[--><div class="content"><!--[--><!--]--><div class="md-header"><div class="md-title">【源码第三期】简单理解co源码及实现</div><span id="jinrishici-sentence">正在加载今日诗词....</span><div class="md-date">2021-11-06</div></div><ul class="catalog"><!--[--><li class="catalog-item"><!----><a class="level level-3" href="#_1-什么是co">1. 什么是CO</a></li><li class="catalog-item"><!----><a class="level level-3" href="#_2-阅读前准备">2. 阅读前准备</a></li><li class="catalog-item"><!----><a class="level level-3" href="#_3-开始阅读">3. 开始阅读</a></li><li class="catalog-item"><!----><a class="level level-3" href="#_4-实现简单co">4. 实现简单co</a></li><li class="catalog-item"><!----><a class="level level-3" href="#"></a></li><li class="catalog-item"><!----><a class="level level-3" href="#总结">总结</a></li><!--]--></ul><div><blockquote><p>更多的源码阅读文章更新在自己的语雀：<a href="https://www.yuque.com/shouhu-pelkv/nnq9kp" target="_blank" rel="noopener noreferrer">https://www.yuque.com/shouhu-pelkv/nnq9kp</a></p><p>非常感谢若川大佬的阅读源码活动，原文：<a href="https://juejin.cn/post/6844904088220467213#heading-11" target="_blank" rel="noopener noreferrer">https://juejin.cn/post/6844904088220467213#heading-11</a></p></blockquote><h3 id="_1-什么是co"><a class="header-anchor" href="#_1-什么是co" aria-hidden="true">#</a> 1. 什么是CO</h3><p>之前完全没有听说过CO是什么，简单的了解到它是利用了<code>ES6的generator和promise特性</code>实现了异步流程控制的一个库。简单的实现流程就是co在内部将<code>generator</code>对象的<code>next()</code>方法自动执行，实现<code>generator</code>函数的运行，并返回最终运行的结果。</p><h3 id="_2-阅读前准备"><a class="header-anchor" href="#_2-阅读前准备" aria-hidden="true">#</a> 2. 阅读前准备</h3><h4 id="_2-1-简单了解generator"><a class="header-anchor" href="#_2-1-简单了解generator" aria-hidden="true">#</a> 2.1 简单了解generator</h4><p>虽然<code>generator</code>函数是一个ES6提供的异步解决方案，但由于自己之前从来没有写过，所以需要“复习”下这块内容。</p><h5 id="_2-1-1-generator的声明"><a class="header-anchor" href="#_2-1-1-generator的声明" aria-hidden="true">#</a> 2.1.1 generator的声明</h5><p><code>generator</code>函数声明时与普通函数不一样的地方主要有两个点：</p><ul><li>function 与 函数名中间必须加一个* 号</li><li>定义内部状态时使用yield声明</li><li>function 与 函数名中间必须加一个* 号</li><li>定义内部状态时使用yield声明</li></ul><div class="language-"><pre><code>function* testGenerator() {
+	yield &#39;test&#39;;
+  yield &#39;Gelx&#39;;
+  
+  return &#39;break&#39;;
+}
+
+let run = testGenerator();
+</code></pre></div><h5 id="_2-1-2-generator的使用"><a class="header-anchor" href="#_2-1-2-generator的使用" aria-hidden="true">#</a> 2.1.2 generator的使用</h5><p>使用 <code>generator</code>函数时，函数并不会马上执行，它会指向内部状态的指针对象。如果要执行时，必须调用遍历器对象的<code>next</code>方法，使得指针移向下一个状态。每次调用next方法，内部指针就从函数头部或上一次停下来的地方开始执行，直到遇到下一个yield表达式（或return语句）为止。</p><p>更详细的generator函数介绍可以参考<a href="https://es6.ruanyifeng.com/#docs/generator" target="_blank" rel="noopener noreferrer">Generator函数的语法</a></p><h3 id="_3-开始阅读"><a class="header-anchor" href="#_3-开始阅读" aria-hidden="true">#</a> 3. 开始阅读</h3><h4 id="_3-1-阅读前疑问"><a class="header-anchor" href="#_3-1-阅读前疑问" aria-hidden="true">#</a> 3.1 阅读前疑问</h4><p>在简单的了解了co的作用以及<code>generator</code>的使用后，有以下几个疑问：</p><ul><li>怎么样实现依次调用next()方法</li><li>如何将<strong>yield</strong>后边运算异步结果返回给对应的变量</li></ul><!----><ul><li>co自身怎么返回generator函数最后的return值</li></ul><h4 id="_3-2-开始阅读"><a class="header-anchor" href="#_3-2-开始阅读" aria-hidden="true">#</a> 3.2 开始阅读</h4><h5 id="_3-2-1-源码地址"><a class="header-anchor" href="#_3-2-1-源码地址" aria-hidden="true">#</a> 3.2.1 源码地址</h5><p>co的源码地址为：<a href="https://github.com/tj/co" target="_blank" rel="noopener noreferrer">https://github.com/tj/co</a></p><h4 id="_3-2-2-如何使用"><a class="header-anchor" href="#_3-2-2-如何使用" aria-hidden="true">#</a> 3.2.2 如何使用</h4><p>在项目的<code>Readme.md</code>中可以找到co的使用方法</p><div class="language-"><pre><code>co(function* () {
+  var result = yield Promise.resolve(true);
+  return result;
+}).then(function (value) {
+  console.log(value);
+}, function (err) {
+  console.error(err.stack);
+});
+</code></pre></div><p>用法也比较简单，调用co函数，里面接收了一个<code>generator</code>函数，同时这个函数中返回了一个Promise。</p><h4 id="_3-2-3-源码阅读"><a class="header-anchor" href="#_3-2-3-源码阅读" aria-hidden="true">#</a> 3.2.3 源码阅读</h4><div class="language-"><pre><code>function co(gen) {
+  var ctx = this;
+  // 剔除gen对象，保留其他的入参
+  var args = slice.call(arguments, 1);
+
+ // 返回一个最外围的Promise
+  return new Promise(function(resolve, reject) {
+    // 判断gen是不是函数，以及判断gen.next是不是函数，不是函数则直接reslove
+    if (typeof gen === &#39;function&#39;) gen = gen.apply(ctx, args);
+    if (!gen || typeof gen.next !== &#39;function&#39;) return resolve(gen);
+		// 执行第一次next
+    onFulfilled();
+    // 先执行gen.next，获取参数
+    function onFulfilled(res) {
+      var ret;
+      try {
+        ret = gen.next(res);
+      } catch (e) {
+        return reject(e);
+      }
+      // 将执行返回的结果传入next函数
+      next(ret);
+      return null;
+    }
+		
+		// 对gen.throw
+    function onRejected(err) {
+      var ret;
+      try {
+        ret = gen.throw(err);
+      } catch (e) {
+        return reject(e);
+      }
+      next(ret);
+    }
+
+		// co中做的next执行
+    function next(ret) {
+      // 如果gen已经执行完毕，则直接返回结果
+      if (ret.done) return resolve(ret.value);
+      // 如果没有执行完成，就封装成Promise继续执行
+      var value = toPromise.call(ctx, ret.value);
+      // 判断value是否是Promise,如果是就继续执行，不是就Rejected
+      if (value &amp;&amp; isPromise(value)) return value.then(onFulfilled, onRejected);
+      return onRejected(new TypeError(&#39;You may only yield a function, promise, generator, array, or object, &#39;
+        + &#39;but the following object was passed: &quot;&#39; + String(ret.value) + &#39;&quot;&#39;));
+    }
+  });
+}
+</code></pre></div><p>通过对源码的简单阅读，可以总结出co执行的过程如下：</p><ul><li>进入最外层promise</li><li>判断传入的gen、gen.next是否为函数，是则继续执行</li></ul><!----><ul><li>进入onFulfilled，并记录下<code>generator</code>函数执行的第一个yield返回的参数，并将该参数传入next函数</li><li>如果传入next函数的done为true，则返回最外层的promise的resolve</li></ul><!----><ul><li>如果传入next函数的done为false，则返回value，并判断该value是否可以转为内部promise对象，如果无法转移，则抛出错误，返回最外层promise的reject</li><li>如果可以转化为promise对象，则执行内部promise，通过<code>.then(onFulfilled, onRejected)</code>开始执行</li></ul><!----><ul><li>继续在onFulfilled、onRejected内部继续调用next函数，执行yield</li><li>当所有的yield执行返回完毕后，将最后的return值返回给最外层promise的resolve</li></ul><!----><ul><li>结束调用</li></ul><h4 id="_3-2-4-next函数"><a class="header-anchor" href="#_3-2-4-next函数" aria-hidden="true">#</a> 3.2.4 next函数</h4><p>在整个co执行的流程中，最重要的就是next函数，而next函数中最重要的一步则是转化为内部Promise对象，这部分的源码如下：</p><div class="language-"><pre><code>function toPromise(obj) {
+    // 确保obj有意义
+    if (!obj) return obj;
+    // 若是Promise对象，则直接返回
+    if (isPromise(obj)) return obj;
+    // 若是generator函数或者generator对象，则递归调用co函数
+    if (isGeneratorFunction(obj) || isGenerator(obj)) return co.call(this, obj);
+    // 若是函数，则转化promise类函数后再返回
+    if (&#39;function&#39; == typeof obj) return thunkToPromise.call(this, obj);
+    // 若是数组，转化promise数组后返回
+    if (Array.isArray(obj)) return arrayToPromise.call(this, obj);
+    // 若是对象，转化promise对象后返回
+    if (isObject(obj)) return objectToPromise.call(this, obj);
+    return obj;
+}
+</code></pre></div><h3 id="_4-实现简单co"><a class="header-anchor" href="#_4-实现简单co" aria-hidden="true">#</a> 4. 实现简单co</h3><p>\</p><h4 id="_4-1-实现简单模拟请求"><a class="header-anchor" href="#_4-1-实现简单模拟请求" aria-hidden="true">#</a> 4.1 实现简单模拟请求</h4><p>首先先实现通过调用Promise获取参数</p><div class="language-"><pre><code>function request(time) {
+	return new Promise(resolve =&gt; {
+  	setTimeout(()=&gt; {
+    	resolve({name:&quot;瘦虎&quot;})
+    },time)
+  })
+}
+
+
+// 用yield获取请求到的值
+
+function* getData() {
+	yield request()
+}
+</code></pre></div><h4 id="_4-2-实现简单co"><a class="header-anchor" href="#_4-2-实现简单co" aria-hidden="true">#</a> 4.2 实现简单co</h4><p>整个co核心功能有两点：</p><ul><li>参数传递</li><li>generator.next 自动执行</li></ul><div class="language-"><pre><code>function co(gen) {
+	1. 获取参数
+  let ctx = this;
+  const args = Array.propotype.slice.call(arguments, 1);
+  gen = gen.apply(ctx,args);
+	return new Promise((resolve,reject) =&gt; {
+  	onFulfilled()
+    
+    function onFulfilled(res) {
+    	let ret = gen.next(res);
+      next(ret);
+    }
+    
+    function next(ret) {
+    	if(ret.done) return resolve(ret.value);
+      let promise = ret.value
+      
+      promise &amp;&amp; promise.then(onFulfilled);
+    }
+  })
+}
+
+// 最后效果
+co(function* getData() {
+	let res = yield request();
+  console.log(result)
+})
+</code></pre></div><h3 id=""><a class="header-anchor" href="#" aria-hidden="true">#</a></h3><h3 id="总结"><a class="header-anchor" href="#总结" aria-hidden="true">#</a> 总结</h3><p>这次阅读co花了很长的时间，原因在于除了需要了解co的整套执行逻辑外，还需要了解<code>generator</code>的使用方式、特性、执行规律，这样才能更好的理解为什么会有co函数。虽然源码不多，但看懂整套逻辑后，突然通透的感觉还是很舒服的，希望后续的阅读，我可以提升自己的阅读效率，更高效的完成学习。</p></div><div class="links-wrapper"><div class="prev-link"><!----></div><div class="next-link"><!----></div></div><div><footer class="page-edit"><!--[--><a href="https://juejin.cn/user/465848663286712"><img class="imgIcon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAABfVBMVEX///8Ad/8AgP8AgP8AgP8Aff8AgP8Af/8AgP8AVf8Af/8Af/8AgP8AgP8Af/8Afv8AAP8Afv8Afv8Aef8AgP8AdP8Afv8AgP8AgP8Acf8Ae/8AgP8Af/8AgP8Af/8Af/8AfP8Afv8AgP8Af/8Af/8Afv8Afv8AgP8Afv8AgP8Af/8Af/8AgP8AgP8Afv8AgP8Af/8AgP8AgP8AgP8Ae/8Afv8Af/8AgP8Af/8AgP8Af/8Af/8Aff8Af/8Abf8AgP8Af/8AgP8Af/8Af/8Afv8AgP8AgP8Afv8Afv8AgP8Af/8Aff8AgP8Afv8AgP8Aff8AgP8AfP8AgP8Ae/8AgP8Af/8AgP8AgP8AgP8Afv8AgP8AgP8AgP8Afv8AgP8AgP8AgP8AgP8AgP8Af/8AgP8Af/8Af/8Aev8Af/8AgP8Aff8Afv8AgP8AgP8AgP8Af/8AgP8Af/8Af/8AgP8Afv8AgP8AgP8AgP8AgP8Af/8AeP8Af/8Af/8Af//////rzEHnAAAAfXRSTlMAD7CCAivatxIDx5EMrP19AXdLEwgLR+6iCR/M0yLRzyFF7JupSXn8cw6v60Q0QeqzKtgeG237HMne850/6Qeq7QaZ+WdydHtj+OM3qENCMRYl1B3K2U7wnlWE/mhlirjkODa9FN/BF7/iNV/2kASNZpX1Wlf03C4stRGxgUPclqoAAAABYktHRACIBR1IAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4gEaBzgZ4yeM3AAAAT9JREFUOMvNUldbwkAQvCAqsSBoABE7asSOBRUVVBQNNuy9996789+9cMFAMHnVebmdm+/bmdtbQv4dOFOW2UjPzgFyLfo6nweKfIMOBYWwFtmMPGz2Yj2pJI0JDq3udJW6VVbmKa9I192VQFV1ktXUAl5NB0cd4KpnORqsEO2ZIRpF9gJfE9Dckqq0KuZt7UAH5+8EPF3spjsRpCeQNO/tA/qDwIDA+OCQbBoKA8NOdjMySgcZGVM6jwcgRuUiSs0nlPFNSrEpJfU0jTLD6llqbvKxei7OzvkFNQohi0vAsj81+MoqsCaoPOQFgus/1LyxichW+hS2JWCHZ7VlF9jb187pIAYcHiViHAMnp5mTjJ8B5xeEXF4B1ze/fTh/C0h398DDI9HB07O8ci+vRBdvdGnfP4gBuM8vw7X/G3wDmFhFZEdxzjMAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTgtMDEtMjZUMDc6NTY6MjUrMDE6MDA67pVWAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE4LTAxLTI2VDA3OjU2OjI1KzAxOjAwS7Mt6gAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAAWdEVYdFRpdGxlAGp1ZWppbl9sb2dvIGNvcHlxapmKAAAAV3pUWHRSYXcgcHJvZmlsZSB0eXBlIGlwdGMAAHic4/IMCHFWKCjKT8vMSeVSAAMjCy5jCxMjE0uTFAMTIESANMNkAyOzVCDL2NTIxMzEHMQHy4BIoEouAOoXEXTyQjWVAAAAAElFTkSuQmCC"></a><a href="https://www.yuque.com/shouhu-pelkv"><img class="imgIcon" src="/blog/_assets/yuque.2a316201.png"></a><!--]--></footer><p class="platform"> 以上皆为 <a href="javascript:;">瘦虎</a> 文章发布平台 </p><p class="platform"> Copyright © 2020-2021 <a href="https://github.com/gelxgx">@Gelxgx</a></p></div><!--[--><!--]--></div><!-- 只想点击背景才关闭 请使用 .self 修饰符 --><div style="display:none;" class="imgBox"><img src=""></div><!--]--></main><div class="theme-select" data-v-1eb0b654><ul data-v-1eb0b654><li class="active" data-v-1eb0b654>☀️</li><li class="" data-v-1eb0b654>🌑</li></ul></div></div><!----><!--]--></div>
+    <script>__VP_HASH_MAP__ = JSON.parse("{\"README.md\":\"56ed425b\",\"index.md\":\"1783787d\",\"more_Friendship.md\":\"0d404086\",\"more_docs.md\":\"c4c7f0eb\",\"more_index.md\":\"350c9b6f\",\"more_tags.md\":\"36c4af96\",\"docs_HTTP_HTTP.md\":\"a018e2b2\",\"docs_React_react.md\":\"3700d50c\",\"docs_TypeScript_ts-class-function.md\":\"47de5c14\",\"docs_TypeScript_ts-type-interface.md\":\"4b859e67\",\"docs_arithmetic_arithmetic.md\":\"c0bf1668\",\"docs_soundCode_co.md\":\"17fa0c9b\",\"docs_soundCode_creat-vue.md\":\"782b5c9a\",\"docs_soundCode_koa-compose.md\":\"f6f000ab\",\"docs_soundCode_mitt-tiny-emitter.md\":\"764ec47d\",\"docs_soundCode_update-notifier.md\":\"342ac959\",\"docs_soundCode_validate-npm-package-name.md\":\"b739095c\",\"docs_soundCode_vite.md\":\"947ae370\",\"docs_soundCode_vue20tools.md\":\"8cbc77c4\",\"docs_soundCode_vueDevTools.md\":\"ec3412ef\"}")</script>
+    <script type="module" async src="/blog/_assets/app.9e239910.js"></script>
+  </body>
+</html>

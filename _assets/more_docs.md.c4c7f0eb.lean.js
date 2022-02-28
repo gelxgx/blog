@@ -1,0 +1,1 @@
+import{u as t,q as e,g as a,x as r}from"./common-1984dd55.js";const o='{"title":"📅 归档","frontmatter":{"page":true,"date":"2021-10-07","title":"📅 归档","describe":"归档"},"relativePath":"more/docs.md","lastUpdated":1646063815125.8818}';var s={};s.render=function(o,s,d,n,c,i){const l=t("Docs",!0);return e(),a("div",null,[r(l)])};export{o as __pageData,s as default};

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>
+      【源码计划第八期】create-vue | 瘦虎
+    </title>
+    <meta name="description" content="A VitePress site">
+    <link rel="stylesheet" href="/blog/_assets/style.822f840d.css">
+    <link rel="modulepreload" href="/blog/_assets/common-1984dd55.js">
+    <link rel="modulepreload" href="/blog/_assets/docs_soundCode_creat-vue.md.782b5c9a.lean.js">
+    <link rel="modulepreload" href="/blog/_assets/app.9e239910.js">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="keywords" content="瘦虎">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="stylesheet" href="https://lib.baomitu.com/gitalk/1.7.0/gitalk.min.css">
+    <script src="https://lib.baomitu.com/gitalk/1.7.0/gitalk.min.js"></script>
+    <script src="https://lib.baomitu.com/axios/0.21.1/axios.js"></script>
+    
+  </head>
+  <body>
+    <div id="app"><!--[--><div id="containerColor" class="no-sidebar theme" data-v-1eb0b654><header class="navbar" data-v-1eb0b654><!--[--><a class="title" aria-label="瘦虎, back to home" href="/blog/"><img class="logo" src="/blog/favicon.ico" alt="logo"><span>瘦虎</span></a><div class="flex-grow"></div><nav class="nav-links hide-mobile"><!--[--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/index.html" target="" rel="">🏠 首页<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/docs.html" target="" rel="">📅 归档<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/tags.html" target="" rel="">📂 分类<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/Friendship.html" target="" rel="">👫 友情链接<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--]--><!----><!----></nav><!--[--><!--]--><!--]--><div class="sidebar-button" data-v-1eb0b654><svg class="icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z" class></path></svg></div></header><aside class="" data-v-1eb0b654><!--[--><nav class="nav-links show-mobile"><!--[--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/index.html" target="" rel="">🏠 首页<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/docs.html" target="" rel="">📅 归档<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/tags.html" target="" rel="">📂 分类<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/Friendship.html" target="" rel="">👫 友情链接<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--]--><!----><!----></nav><!--[--><!--]--><ul class="sidebar"><!--[--><!--]--></ul><!--[--><!--]--><!--]--></aside><!----><!-- TODO: make this button accessible --><div class="sidebar-mask" data-v-1eb0b654></div><main data-v-1eb0b654><!--[--><div class="content"><!--[--><!--]--><div class="md-header"><div class="md-title">【源码计划第八期】create-vue</div><span id="jinrishici-sentence">正在加载今日诗词....</span><div class="md-date">2021-12-01</div></div><ul class="catalog"><!--[--><li class="catalog-item"><!----><a class="level level-3" href="#_1-阅读前准备">1. 阅读前准备</a></li><li class="catalog-item"><!----><a class="level level-3" href="#_2-使用它">2. 使用它</a></li><li class="catalog-item"><!----><a class="level level-3" href="#_3-阅读源码">3. 阅读源码</a></li><li class="catalog-item"><!----><a class="level level-3" href="#_4-总结">4. 总结</a></li><!--]--></ul><div><blockquote><p>继续跟上川哥举办的阅读源码活动~</p><p>掘金原文：<a href="https://juejin.cn/post/7018344866811740173#heading-4" target="_blank" rel="noopener noreferrer">https://juejin.cn/post/7018344866811740173#heading-4</a></p></blockquote><h3 id="_1-阅读前准备"><a class="header-anchor" href="#_1-阅读前准备" aria-hidden="true">#</a> 1. 阅读前准备</h3><p>这是一个vite+vue3的脚手架，目前还属于比较初版的状态，README也不是很全面，大致浏览源码后，主要有以下几点可以好好学习下：</p><ul><li>npm init</li><li>交互式初始化</li></ul><!----><ul><li>根据选择配置生成不同模板</li><li>模板生成原理</li></ul><p>项目地址： <a href="https://github.com/vuejs/create-vue" target="_blank" rel="noopener noreferrer">https://github.com/vuejs/create-vue</a></p><p>这是一个我之前完全没有接触过的项目，文章中间会拓展很多<code>create-Vue</code>之外的内容，最终希望自己可以通过阅读源码，产出cli工具，方便在工作中项目开发</p><h3 id="_2-使用它"><a class="header-anchor" href="#_2-使用它" aria-hidden="true">#</a> 2. 使用它</h3><p>使用起来非常简单，只需要 npm init 即可</p><div class="language-"><pre><code>npm init vue@next
+</code></pre></div><p>接着输入项目名、确认是否需要额外的配置项，即可生成一个完整的项目</p><p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f538e0ebb2f745f99bd6f4c1383f3dd2~tplv-k3u1fbpfcp-zoom-1.image" alt=""></p><p>最终只需要<code>cd vue-project</code>、<code>npm install</code>、<code>npm run dev</code>即可非常急速的打开这个项目</p><h3 id="_3-阅读源码"><a class="header-anchor" href="#_3-阅读源码" aria-hidden="true">#</a> 3. 阅读源码</h3><p>首先克隆项目、安装依赖</p><div class="language-"><pre><code>git clone https://github.com/vuejs/create-vue.git
+npm install
+</code></pre></div><p>进入package.json看看可执行的脚本</p><p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/75bebe4d2d9b431a9111abfd77fa19fa~tplv-k3u1fbpfcp-zoom-1.image" alt=""></p><p>看到几个熟悉的脚本：</p><ul><li>build:将脚手架主文件index.js打包输出成outfile.cjs</li><li>test:执行测试用例</li></ul><p>先从执行test调试起！</p><h4 id="_3-1-snapshot"><a class="header-anchor" href="#_3-1-snapshot" aria-hidden="true">#</a> 3.1 snapshot</h4><p>执行<code>npm run test</code>时，会先执行<code>npm run pretest</code> （第三期的知识点：npm钩子函数）</p><p>看看snapshot中都做了什么事情~</p><p>进入snapshot发现这里做了两件事：</p><ul><li>调用node的子进程方法中同步进程函数，根据index.js文件中的规则，在playground文件夹下创建不同的模板，方便调用test.js进行测试</li><li>根据五种拓展属性，进行二进制的排列组合，最终会生成31种+default一共32种组合</li></ul><p>这里主要看一下生成模板的方法：</p><div class="language-"><pre><code>// 获取基本路径
+const __dirname = path
+  .dirname(new URL(import.meta.url).pathname)
+  .substring(process.platform === &#39;win32&#39; ? 1 : 0)
+
+
+// 这里的bin是执行打包后的index.js文件生成项目模板，方便调试就改成了index.js
+// const bin = path.resolve(__dirname, &#39;./outfile.cjs&#39;)
+const bin = path.resolve(__dirname, &#39;./index.js&#39;)
+// 目标文件夹
+const playgroundDir = path.resolve(__dirname, &#39;./playground/&#39;)
+
+function createProjectWithFeatureFlags(flags) {
+  // flags会以数组的形式传入，如果出现多个参数时，用-分割
+  const projectName = flags.join(&#39;-&#39;)
+  console.log(`Creating project ${projectName}`)
+  // 调用子进程
+  // 这部分会生成一个类似于 node ./index.js --typescript --force的命令
+  // 主要就是调用index.js中的init方法生成模板
+  const { status } = spawnSync(
+    &#39;node&#39;,
+    [bin, projectName, ...flags.map((flag) =&gt; `--${flag}`), &#39;--force&#39;],
+    {
+      cwd: playgroundDir,
+      stdio: [&#39;pipe&#39;, &#39;pipe&#39;, &#39;inherit&#39;]
+    }
+  )
+
+  if (status !== 0) {
+    process.exit(status)
+  }
+}
+</code></pre></div><p>这里主要的灵魂就是调起子进程，执行文件生成项目模板</p><p>接着看看具体是怎么生成模板的</p><h4 id="_3-2-index-js"><a class="header-anchor" href="#_3-2-index-js" aria-hidden="true">#</a> 3.2 index.js</h4><p>这部分主要做了以下几件事：</p><ul><li>支持feature Flags直接生成模板</li><li>调用<code>prompts</code>进行交互式配置</li></ul><!----><ul><li>根据配置调用render()渲染模板</li><li>根据配置生成不同README</li></ul><h5 id="_3-2-1-交互式"><a class="header-anchor" href="#_3-2-1-交互式" aria-hidden="true">#</a> 3.2.1 交互式</h5><p>首先在script中添加一行<code>&quot;dev&quot;:&quot;node index.js&quot;</code>运行调试，开始我们的debug</p><p>最先进入的会是一段交互式配置，这部分代码将做省略，保留一些调用了工具方法的配置</p><div class="language-"><pre><code>let result = {}
+
+  try {
+    result = await prompts(
+      [
+        {
+          name: &#39;shouldOverwrite&#39;,
+          // 这里判断了一次改名称是否可写入
+          type: () =&gt; (canSafelyOverwrite(targetDir) || forceOverwrite ? null : &#39;confirm&#39;),
+          message: () =&gt; {
+            const dirForPrompt =
+              targetDir === &#39;.&#39; ? &#39;Current directory&#39; : `Target directory &quot;${targetDir}&quot;`
+
+            return `${dirForPrompt} is not empty. Remove existing files and continue?`
+          }
+        },
+        {
+          name: &#39;overwriteChecker&#39;,
+          type: (prev, values = {}) =&gt; {
+            if (values.shouldOverwrite === false) {
+              throw new Error(red(&#39;✖&#39;) + &#39; Operation cancelled&#39;)
+            }
+            return null
+          }
+        },
+        {
+          name: &#39;packageName&#39;,
+          // 这里判断了一次当前包名称是否合法
+          type: () =&gt; (isValidPackageName(targetDir) ? null : &#39;text&#39;),
+          message: &#39;Package name:&#39;,
+          // 这里调用了转换包名工具
+          initial: () =&gt; toValidPackageName(targetDir),
+          validate: (dir) =&gt; isValidPackageName(dir) || &#39;Invalid package.json name&#39;
+        },
+      ],
+    )
+  } catch (cancelled) {
+    console.log(cancelled.message)
+    process.exit(1)
+  }
+</code></pre></div><p>这三个工具函数也比较简单，通过正则或node方法，进行简单的判断</p><div class="language-"><pre><code>// 使用正则判断当前包名是否合法，没有采用validate-npm-package-name（第七期检测包名是否合法的工具），自己实现了检测功能
+function isValidPackageName(projectName) {
+  return /^(?:@[a-z0-9-*~][a-z0-9-*._~]*/)?[a-z0-9-~][a-z0-9-._~]*$/.test(projectName)
+}
+
+// 对传入的包名称进行转写
+function toValidPackageName(projectName) {
+  return projectName
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, &#39;-&#39;)
+    .replace(/^[._]/, &#39;&#39;)
+    .replace(/[^a-z0-9-~]+/g, &#39;-&#39;)
+}
+
+// 使用node的内置方法，判断本地是否存在该名称的文件夹，以及该文件夹下是否有文件
+function canSafelyOverwrite(dir) {
+  return !fs.existsSync(dir) || fs.readdirSync(dir).length === 0
+}
+</code></pre></div><p>在执行完所有的交互配置后，会在文件内部<code>result</code>属性中记录最终的配置结果：</p><p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2b95f5d4163047e7804616c7a7a411f0~tplv-k3u1fbpfcp-zoom-1.image" alt=""></p><h5 id="_3-2-2生成模板"><a class="header-anchor" href="#_3-2-2生成模板" aria-hidden="true">#</a> 3.2.2生成模板</h5><p>生成完所有配置后，会根据配置进行模板生成，具体生成顺序如下：</p><ul><li><p>生成base基础模板</p></li><li><p>根据不同配置需求，继续添加合并模板</p></li><li><p>如果需要typeScript，将所有.js文件改成.ts，并将jsconfig.json改成tsconfig.json</p></li><li><p>如果不需要测试，就把测试相关文件删除</p></li><li><p>生成README文档</p></li></ul><p>第一步！生成模板</p><div class="language-"><pre><code>import renderTemplate from &#39;./utils/renderTemplate.js&#39;
+
+// 设置模板文件地址
+const templateRoot = path.resolve(__dirname, &#39;template&#39;)
+
+// 生成模板主函数
+const render = function render(templateName) {
+  // 具体要生成的模板目录下的子目录
+  const templateDir = path.resolve(templateRoot, templateName)
+  // 传入子目录和项目的地址
+  renderTemplate(templateDir, root)
+}
+
+// Render base template
+render(&#39;base&#39;)
+</code></pre></div><p>接着看看具体生成模板的流程，同样也分成三部分：</p><ul><li>递归copy所有的模板文件进项目中</li><li>如果文件中存在package.json，进行对象合并</li></ul><!----><ul><li>将以<code>_</code>开头的文件替换成<code>.</code>开头</li></ul><p>第一部分：处理文件夹</p><div class="language-"><pre><code>const stats = fs.statSync(src)
+// 如果传入的src是文件夹，就递归调用renderTemplate处理文件夹下的每一个文件
+if (stats.isDirectory()) {
+  // if it&#39;s a directory, render its subdirectories and files recursively
+  fs.mkdirSync(dest, { recursive: true })
+  for (const file of fs.readdirSync(src)) {
+    renderTemplate(path.resolve(src, file), path.resolve(dest, file))
+  }
+  return
+}
+</code></pre></div><p>第二部分：处理<code>package.json</code>文件：</p><div class="language-"><pre><code>import deepMerge from &#39;./deepMerge.js&#39;
+import sortDependencies from &#39;./sortDependencies.js&#39;
+const filename = path.basename(src)
+
+// 如果文件名称为package.json且该文件已经存在
+if (filename === &#39;package.json&#39; &amp;&amp; fs.existsSync(dest)) {
+  // 存放需要操作的文件
+  const existing = JSON.parse(fs.readFileSync(dest))
+  // 存放需要拷贝的文件
+  const newPackage = JSON.parse(fs.readFileSync(src))
+  // 重点！：调用了两个函数，deepMerge用于处理两个json的合并，sortDependencies用于排序
+  const pkg = sortDependencies(deepMerge(existing, newPackage))
+  fs.writeFileSync(dest, JSON.stringify(pkg, null, 2) + &#39;\n&#39;)
+  return
+}
+</code></pre></div><p>处理文件过程中使用到两个函数：<code>deepMerge</code>、<code>sortDependencies</code>，分别用于处理合并和排序</p><p>继续深入看<code>deepMerge</code>，这部分主要是对 对象和数组的处理：</p><ul><li>处理对象时，通过递归赋值进行处理</li><li>处理数组时，通过解构合并进行处理</li></ul><div class="language-"><pre><code>const isObject = (val) =&gt; val &amp;&amp; typeof val === &#39;object&#39;
+const mergeArrayWithDedupe = (a, b) =&gt; Array.from(new Set([...a, ...b]))
+
+/**
+ * Recursively merge the content of the new object to the existing one
+ * @param {Object} target the existing object
+ * @param {Object} obj the new object
+ */
+function deepMerge(target, obj) {
+  // 循环传入的template中的模板
+  for (const key of Object.keys(obj)) {
+    const oldVal = target[key]
+    const newVal = obj[key]
+		//如果参数的内容是数组
+    if (Array.isArray(oldVal) &amp;&amp; Array.isArray(newVal)) {
+      // 使用解构进行合并
+      target[key] = mergeArrayWithDedupe(oldVal, newVal)
+    } else if (isObject(oldVal) &amp;&amp; isObject(newVal)) {
+      // 如果参数内容是对象，就继续递归处理，直到是内容
+      target[key] = deepMerge(oldVal, newVal)
+    } else {
+      // 直接为内容时，直接赋值
+      target[key] = newVal
+    }
+  }
+
+  return target
+}
+</code></pre></div><p>合并后继续做排序的处理，这时会进入到<code>sortDependencies</code>函数中</p><div class="language-"><pre><code>export default function sortDependencies(packageJson) {
+  const sorted = {}
+	// 依照数组中元素的顺序，进行遍历排序
+  const depTypes = [&#39;dependencies&#39;, &#39;devDependencies&#39;, &#39;peerDependencies&#39;, &#39;optionalDependencies&#39;]
+
+  for (const depType of depTypes) {
+    if (packageJson[depType]) {
+      sorted[depType] = {}
+
+      Object.keys(packageJson[depType])
+        .sort()
+        .forEach((name) =&gt; {
+          sorted[depType][name] = packageJson[depType][name]
+        })
+    }
+  }
+
+  return {
+    ...packageJson,
+    ...sorted
+  }
+}
+</code></pre></div><p>第三部分，修改文件名</p><p>项目中以<code>.</code>开头的文件都是一些配置文件，而如果直接在模板中存放这些文件时，可能会造成编译器识别的一些影响，所以在模板中，都以<code>_</code>开头存放文件，在生成模板文件时再进行改名</p><p>这里比较简单，就是一个node.path的调用</p><div class="language-"><pre><code>if (filename.startsWith(&#39;_&#39;)) {
+  // rename `_file` to `.file`
+  dest = path.resolve(path.dirname(dest), filename.replace(/^_/, &#39;.&#39;))
+}
+</code></pre></div><p>至此，一个模板已经完全生成！</p><p>让我们进入简单的第二步：根据自定义配置继续生成模板</p><p>这部分比较简单，从之前的配置信息中，生成调用不同路径下的文件，继续生成模板</p><div class="language-"><pre><code>  // Add configs.
+  if (needsJsx) {
+    render(&#39;config/jsx&#39;)
+  }
+  if (needsRouter) {
+    render(&#39;config/router&#39;)
+  }
+  if (needsVuex) {
+    render(&#39;config/vuex&#39;)
+  }
+  if (needsTests) {
+    render(&#39;config/cypress&#39;)
+  }
+  if (needsTypeScript) {
+    render(&#39;config/typescript&#39;)
+  }
+
+  // Render code template.
+  // prettier-ignore
+  const codeTemplate =
+    (needsTypeScript ? &#39;typescript-&#39; : &#39;&#39;) +
+    (needsRouter ? &#39;router&#39; : &#39;default&#39;)
+  render(`code/${codeTemplate}`)
+
+  // Render entry file (main.js/ts).
+  if (needsVuex &amp;&amp; needsRouter) {
+    render(&#39;entry/vuex-and-router&#39;)
+  } else if (needsVuex) {
+    render(&#39;entry/vuex&#39;)
+  } else if (needsRouter) {
+    render(&#39;entry/router&#39;)
+  } else {
+    render(&#39;entry/default&#39;)
+  }
+</code></pre></div><p>继续进入第三步：使用<code>typeScript</code></p><p>这部分比较简单，递归遍历所有后缀为<code>.js</code>的文件，替换成<code>.ts</code>，以及将jsconfig.json转换成tsconfig.json（简单粗暴），在这个过程中调用了<code>preOrderDirectoryTraverse</code>方法，我们重点细看这部分方法</p><div class="language-"><pre><code>if (needsTypeScript) {
+  // rename all `.js` files to `.ts`
+  // rename jsconfig.json to tsconfig.json
+  preOrderDirectoryTraverse(
+    root,
+    () =&gt; {},
+    (filepath) =&gt; {
+      // 如果后缀为.js
+      if (filepath.endsWith(&#39;.js&#39;)) {
+        // 进行替换
+        fs.renameSync(filepath, filepath.replace(/.js$/, &#39;.ts&#39;))
+        // 同时如果为jsconfig.json
+      } else if (path.basename(filepath) === &#39;jsconfig.json&#39;) {
+        // 也进行替换
+        fs.renameSync(filepath, filepath.replace(/jsconfig.json$/, &#39;tsconfig.json&#39;))
+      }
+    }
+  )
+
+  // Rename entry in `index.html`
+  const indexHtmlPath = path.resolve(root, &#39;index.html&#39;)
+  const indexHtmlContent = fs.readFileSync(indexHtmlPath, &#39;utf8&#39;)
+  fs.writeFileSync(indexHtmlPath, indexHtmlContent.replace(&#39;src/main.js&#39;, &#39;src/main.ts&#39;))
+}
+</code></pre></div><p>继续进入<code>preOrderDirectoryTraverse</code></p><div class="language-"><pre><code>// 这里主要是做文件夹和文件的递归
+export function preOrderDirectoryTraverse(dir, dirCallback, fileCallback) {
+  // 首先读取该路径下所有文件
+  for (const filename of fs.readdirSync(dir)) {
+    const fullpath = path.resolve(dir, filename)
+    // 如果是一个文件夹
+    if (fs.lstatSync(fullpath).isDirectory()) {
+      // 执行文件夹的回调
+      dirCallback(fullpath)
+      // in case the dirCallback removes the directory entirely
+      // 如果文件夹没有被删除，还存在
+      if (fs.existsSync(fullpath)) {
+        // 继续递归里面的文件
+        preOrderDirectoryTraverse(fullpath, dirCallback, fileCallback)
+      }
+      continue
+    }
+    // 执行文件的回调
+    fileCallback(fullpath)
+  }
+}
+</code></pre></div><p>至此，ts的转化也已经完成~</p><p>进入第四步：删除测试相关文件</p><p>调用<code>fs.rmdirSync</code>删除文件夹时，只能删除空文件夹，所以需要通过遍历文件夹以及文件夹内所有的文件，先删除文件，再删除文件夹</p><p>这里同样调用了<code>preOrderDirectoryTraverse</code>方法，</p><p>并且在文件夹回调函数中调用了<code>emptyDir</code>方法</p><div class="language-"><pre><code>if (!needsTests) {
+  preOrderDirectoryTraverse(
+    root,
+    (dirpath) =&gt; {
+      const dirname = path.basename(dirpath)
+			// 如果文件夹为测试文件夹
+      if (dirname === &#39;cypress&#39; || dirname === &#39;__tests__&#39;) {
+        // 调用方法进行删除
+        emptyDir(dirpath)
+        fs.rmdirSync(dirpath)
+      }
+    },
+    () =&gt; {}
+  )
+}
+
+
+function emptyDir(dir) {
+  // 继续文件夹递归
+  postOrderDirectoryTraverse(
+    dir,
+    (dir) =&gt; fs.rmdirSync(dir),
+    (file) =&gt; fs.unlinkSync(file)
+  )
+}
+
+export function postOrderDirectoryTraverse(dir, dirCallback, fileCallback) {
+  for (const filename of fs.readdirSync(dir)) {
+    const fullpath = path.resolve(dir, filename)
+    // 如果是文件夹，就继续递归
+    if (fs.lstatSync(fullpath).isDirectory()) {
+      postOrderDirectoryTraverse(fullpath, dirCallback, fileCallback)
+      dirCallback(fullpath)
+      continue
+    }
+    // 如果是文件，调用文件回调函数
+    fileCallback(fullpath)
+  }
+}
+</code></pre></div><p>最后第五步：生成README</p><div class="language-"><pre><code>fs.writeFileSync(
+  path.resolve(root, &#39;README.md&#39;),
+  generateReadme({
+    projectName: result.projectName || defaultProjectName,
+    packageManager,
+    needsTypeScript,
+    needsTests
+  })
+)
+</code></pre></div><h3 id="_4-总结"><a class="header-anchor" href="#_4-总结" aria-hidden="true">#</a> 4. 总结</h3><p>这次的cli源码阅读能感知到自己的知识短板，在执行流程能大概读懂外，对于很多封装方法中涉及到的算法、node指令，阅读起来还是比较吃力，需要反复使用debug和查阅node文档进行理解。</p><p>结合第6期，可以发现在制作脚手架、开源库时，有很多工具库可以直接使用，加快开发速度，例如<code>prompts</code>交互式生成配置，就是一个很不错的库</p><p>后续还会反复阅读这个库的源码，学习和借鉴制作cli的流程，开发一个在工作团队内部可以方便快速拉取模板代码库的cli，并总结一篇制作cli工具的文章</p></div><div class="links-wrapper"><div class="prev-link"><!----></div><div class="next-link"><!----></div></div><div><footer class="page-edit"><!--[--><a href="https://juejin.cn/user/465848663286712"><img class="imgIcon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAABfVBMVEX///8Ad/8AgP8AgP8AgP8Aff8AgP8Af/8AgP8AVf8Af/8Af/8AgP8AgP8Af/8Afv8AAP8Afv8Afv8Aef8AgP8AdP8Afv8AgP8AgP8Acf8Ae/8AgP8Af/8AgP8Af/8Af/8AfP8Afv8AgP8Af/8Af/8Afv8Afv8AgP8Afv8AgP8Af/8Af/8AgP8AgP8Afv8AgP8Af/8AgP8AgP8AgP8Ae/8Afv8Af/8AgP8Af/8AgP8Af/8Af/8Aff8Af/8Abf8AgP8Af/8AgP8Af/8Af/8Afv8AgP8AgP8Afv8Afv8AgP8Af/8Aff8AgP8Afv8AgP8Aff8AgP8AfP8AgP8Ae/8AgP8Af/8AgP8AgP8AgP8Afv8AgP8AgP8AgP8Afv8AgP8AgP8AgP8AgP8AgP8Af/8AgP8Af/8Af/8Aev8Af/8AgP8Aff8Afv8AgP8AgP8AgP8Af/8AgP8Af/8Af/8AgP8Afv8AgP8AgP8AgP8AgP8Af/8AeP8Af/8Af/8Af//////rzEHnAAAAfXRSTlMAD7CCAivatxIDx5EMrP19AXdLEwgLR+6iCR/M0yLRzyFF7JupSXn8cw6v60Q0QeqzKtgeG237HMne850/6Qeq7QaZ+WdydHtj+OM3qENCMRYl1B3K2U7wnlWE/mhlirjkODa9FN/BF7/iNV/2kASNZpX1Wlf03C4stRGxgUPclqoAAAABYktHRACIBR1IAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4gEaBzgZ4yeM3AAAAT9JREFUOMvNUldbwkAQvCAqsSBoABE7asSOBRUVVBQNNuy9996789+9cMFAMHnVebmdm+/bmdtbQv4dOFOW2UjPzgFyLfo6nweKfIMOBYWwFtmMPGz2Yj2pJI0JDq3udJW6VVbmKa9I192VQFV1ktXUAl5NB0cd4KpnORqsEO2ZIRpF9gJfE9Dckqq0KuZt7UAH5+8EPF3spjsRpCeQNO/tA/qDwIDA+OCQbBoKA8NOdjMySgcZGVM6jwcgRuUiSs0nlPFNSrEpJfU0jTLD6llqbvKxei7OzvkFNQohi0vAsj81+MoqsCaoPOQFgus/1LyxichW+hS2JWCHZ7VlF9jb187pIAYcHiViHAMnp5mTjJ8B5xeEXF4B1ze/fTh/C0h398DDI9HB07O8ci+vRBdvdGnfP4gBuM8vw7X/G3wDmFhFZEdxzjMAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTgtMDEtMjZUMDc6NTY6MjUrMDE6MDA67pVWAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE4LTAxLTI2VDA3OjU2OjI1KzAxOjAwS7Mt6gAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAAWdEVYdFRpdGxlAGp1ZWppbl9sb2dvIGNvcHlxapmKAAAAV3pUWHRSYXcgcHJvZmlsZSB0eXBlIGlwdGMAAHic4/IMCHFWKCjKT8vMSeVSAAMjCy5jCxMjE0uTFAMTIESANMNkAyOzVCDL2NTIxMzEHMQHy4BIoEouAOoXEXTyQjWVAAAAAElFTkSuQmCC"></a><a href="https://www.yuque.com/shouhu-pelkv"><img class="imgIcon" src="/blog/_assets/yuque.2a316201.png"></a><!--]--></footer><p class="platform"> 以上皆为 <a href="javascript:;">瘦虎</a> 文章发布平台 </p><p class="platform"> Copyright © 2020-2021 <a href="https://github.com/gelxgx">@Gelxgx</a></p></div><!--[--><!--]--></div><!-- 只想点击背景才关闭 请使用 .self 修饰符 --><div style="display:none;" class="imgBox"><img src=""></div><!--]--></main><div class="theme-select" data-v-1eb0b654><ul data-v-1eb0b654><li class="active" data-v-1eb0b654>☀️</li><li class="" data-v-1eb0b654>🌑</li></ul></div></div><!----><!--]--></div>
+    <script>__VP_HASH_MAP__ = JSON.parse("{\"README.md\":\"56ed425b\",\"index.md\":\"1783787d\",\"more_Friendship.md\":\"0d404086\",\"more_docs.md\":\"c4c7f0eb\",\"more_index.md\":\"350c9b6f\",\"more_tags.md\":\"36c4af96\",\"docs_HTTP_HTTP.md\":\"a018e2b2\",\"docs_React_react.md\":\"3700d50c\",\"docs_TypeScript_ts-class-function.md\":\"47de5c14\",\"docs_TypeScript_ts-type-interface.md\":\"4b859e67\",\"docs_arithmetic_arithmetic.md\":\"c0bf1668\",\"docs_soundCode_co.md\":\"17fa0c9b\",\"docs_soundCode_creat-vue.md\":\"782b5c9a\",\"docs_soundCode_koa-compose.md\":\"f6f000ab\",\"docs_soundCode_mitt-tiny-emitter.md\":\"764ec47d\",\"docs_soundCode_update-notifier.md\":\"342ac959\",\"docs_soundCode_validate-npm-package-name.md\":\"b739095c\",\"docs_soundCode_vite.md\":\"947ae370\",\"docs_soundCode_vue20tools.md\":\"8cbc77c4\",\"docs_soundCode_vueDevTools.md\":\"ec3412ef\"}")</script>
+    <script type="module" async src="/blog/_assets/app.9e239910.js"></script>
+  </body>
+</html>

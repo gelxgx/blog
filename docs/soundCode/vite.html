@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>
+      【源码计划第九期】浅析vite | 瘦虎
+    </title>
+    <meta name="description" content="A VitePress site">
+    <link rel="stylesheet" href="/blog/_assets/style.822f840d.css">
+    <link rel="modulepreload" href="/blog/_assets/common-1984dd55.js">
+    <link rel="modulepreload" href="/blog/_assets/docs_soundCode_vite.md.947ae370.lean.js">
+    <link rel="modulepreload" href="/blog/_assets/app.9e239910.js">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="keywords" content="瘦虎">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="stylesheet" href="https://lib.baomitu.com/gitalk/1.7.0/gitalk.min.css">
+    <script src="https://lib.baomitu.com/gitalk/1.7.0/gitalk.min.js"></script>
+    <script src="https://lib.baomitu.com/axios/0.21.1/axios.js"></script>
+    
+  </head>
+  <body>
+    <div id="app"><!--[--><div id="containerColor" class="no-sidebar theme" data-v-1eb0b654><header class="navbar" data-v-1eb0b654><!--[--><a class="title" aria-label="瘦虎, back to home" href="/blog/"><img class="logo" src="/blog/favicon.ico" alt="logo"><span>瘦虎</span></a><div class="flex-grow"></div><nav class="nav-links hide-mobile"><!--[--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/index.html" target="" rel="">🏠 首页<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/docs.html" target="" rel="">📅 归档<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/tags.html" target="" rel="">📂 分类<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/Friendship.html" target="" rel="">👫 友情链接<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--]--><!----><!----></nav><!--[--><!--]--><!--]--><div class="sidebar-button" data-v-1eb0b654><svg class="icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z" class></path></svg></div></header><aside class="" data-v-1eb0b654><!--[--><nav class="nav-links show-mobile"><!--[--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/index.html" target="" rel="">🏠 首页<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/docs.html" target="" rel="">📅 归档<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/tags.html" target="" rel="">📂 分类<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/Friendship.html" target="" rel="">👫 友情链接<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--]--><!----><!----></nav><!--[--><!--]--><ul class="sidebar"><!--[--><!--]--></ul><!--[--><!--]--><!--]--></aside><!----><!-- TODO: make this button accessible --><div class="sidebar-mask" data-v-1eb0b654></div><main data-v-1eb0b654><!--[--><div class="content"><!--[--><!--]--><div class="md-header"><div class="md-title">【源码计划第九期】浅析vite</div><span id="jinrishici-sentence">正在加载今日诗词....</span><div class="md-date">2022-02-21</div></div><ul class="catalog"><!--[--><li class="catalog-item"><!----><a class="level level-3" href="#一、什么是原生esmodule？">一、什么是原生ESModule？</a></li><li class="catalog-item"><!----><a class="level level-3" href="#二、这个工具做了什么事情？">二、这个工具做了什么事情？</a></li><li class="catalog-item"><!----><a class="level level-3" href="#三、实现过程">三、实现过程</a></li><li class="catalog-item"><!----><a class="level level-3" href="#四、总结">四、总结</a></li><!--]--></ul><div><blockquote><p>对vite的第一印象：快，非常快</p></blockquote><p>本着对vite的兴趣，在阅读完<a href="https://github.com/vuejs/vue-dev-server" target="_blank" rel="noopener noreferrer">玩具vite</a>源码后，对vite的原理有了一个简单的理解：</p><ul><li><p>使用浏览器原生ESModule加载项目文件</p></li><li><p>把需要加载的文件，转译成浏览器看得懂的js文件</p></li><li><p>使用缓存机制，提升HMR速度</p></li></ul><h3 id="一、什么是原生esmodule？"><a class="header-anchor" href="#一、什么是原生esmodule？" aria-hidden="true">#</a> 一、什么是原生ESModule？</h3><h4 id="_1-解释"><a class="header-anchor" href="#_1-解释" aria-hidden="true">#</a> 1.解释</h4><p>这是一个可以让HTML加载script标签时，使用ESModule的方式直接进行加载，例如：</p><div class="language-"><pre><code>&lt;script type=&quot;module&quot;&gt;
+	import main from &#39;./main.js&#39;
+&lt;/script&gt;
+</code></pre></div><h4 id="_2-为什么会快？"><a class="header-anchor" href="#_2-为什么会快？" aria-hidden="true">#</a> 2.为什么会快？</h4><p>浏览器在加载页面遇到原生ES模块时，会通过发送请求的方式导入模块。页面引入模块但未被加载时，这些模块将不会被导入</p><h3 id="二、这个工具做了什么事情？"><a class="header-anchor" href="#二、这个工具做了什么事情？" aria-hidden="true">#</a> 二、这个工具做了什么事情？</h3><h4 id="_1-开发背景"><a class="header-anchor" href="#_1-开发背景" aria-hidden="true">#</a> 1.开发背景</h4><p>在编写vue项目时，我们会需要经历以下步骤：</p><ul><li>引入vue，将vue挂载在html的一个节点中</li></ul><div class="language-"><pre><code>import Vue from &#39;vue&#39;
+import App from &#39;./test.vue&#39;
+
+new Vue({
+  render: h =&gt; h(App)
+}).$mount(&#39;#app&#39;)
+</code></pre></div><p>对于原生ESModule来说，import文件时，需要提供文件完整的URL路径，不能进行简写。</p><ul><li>编写vue文件</li></ul><div class="language-"><pre><code>&lt;template&gt;
+  ...
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  ...
+}
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+...
+&lt;/style&gt;
+</code></pre></div><p>对于浏览器来说，不支持解析vue文件，这样也就导致无法加载页面</p><h4 id="工具需要解决的事情"><a class="header-anchor" href="#工具需要解决的事情" aria-hidden="true">#</a> 工具需要解决的事情</h4><ul><li>在不改变编写习惯的前提下，改变文件加载路径</li><li>对vue文件进行转译</li></ul><h3 id="三、实现过程"><a class="header-anchor" href="#三、实现过程" aria-hidden="true">#</a> 三、实现过程</h3><p>在这个小工具中通过使用加载中间件拦截请求的方式进行文件的实时编译，这一文件存放在<code>../bin/vue-dev-server.js</code>中</p><div class="language-"><pre><code>const express = require(&#39;express&#39;)
+const { vueMiddleware } = require(&#39;../middleware&#39;)
+
+const app = express()
+const root = process.cwd();
+
+// 最重要的一步
+app.use(vueMiddleware())
+
+app.use(express.static(root))
+
+app.listen(3000, () =&gt; {
+  console.log(&#39;server running at http://localhost:3000&#39;)
+})
+</code></pre></div><p>最重要的中间件文件被放在了<code>../middleware</code>中</p><h4 id="_1-解析主逻辑"><a class="header-anchor" href="#_1-解析主逻辑" aria-hidden="true">#</a> 1.解析主逻辑</h4><p>在这个中间件中，分别对<code>.vue</code>、<code>.js</code>、包含<code>__modules</code>三种类型的文件进行了不同的处理</p><div class="language-"><pre><code>return async (req, res, next) =&gt; {
+    if (req.path.endsWith(&#39;.vue&#39;)) {      
+      // ...code 处理vue文件
+      }
+      
+      send(res, out.code, &#39;application/javascript&#39;)
+    } else if (req.path.endsWith(&#39;.js&#39;)) {
+       // ...code 处理js文件
+      }
+
+      send(res, out, &#39;application/javascript&#39;)
+    } else if (req.path.startsWith(&#39;/__modules/&#39;)) {
+      // ...code 处理第三方包
+      }
+
+      send(res, out, &#39;application/javascript&#39;)
+    } else {
+      next()
+    }
+  }
+</code></pre></div><h4 id="_1-1解析vue文件"><a class="header-anchor" href="#_1-1解析vue文件" aria-hidden="true">#</a> 1.1解析vue文件</h4><p>对于浏览器请求到vue的文件时，会被中间件拦截下来，执行<code>bundlesSFC()</code>逻辑。</p><p>这部分主要是将.vue中的<code>template</code>、<code>script</code>、<code>css</code>实时编译成浏览器可以被正常加载的代码。这部分主要涉及到vue组件编译的代码，会在后续进行深入研究。</p><div class="language-"><pre><code>if (req.path.endsWith(&#39;.vue&#39;)) {      
+  const key = parseUrl(req).pathname
+  let out = await tryCache(key)
+
+  if (!out) {
+    // Bundle Single-File Component
+    const result = await bundleSFC(req)
+    out = result
+    cacheData(key, out, result.updateTime)
+  }
+
+  send(res, out.code, &#39;application/javascript&#39;)
+} 
+
+async function bundleSFC (req) {
+  const { filepath, source, updateTime } = await readSource(req)
+  const descriptorResult = compiler.compileToDescriptor(filepath, source)
+  const assembledResult = vueCompiler.assemble(compiler, filepath, {
+    ...descriptorResult,
+    script: injectSourceMapToScript(descriptorResult.script),
+    styles: injectSourceMapsToStyles(descriptorResult.styles)
+  })
+  return { ...assembledResult, updateTime }
+}
+</code></pre></div><h4 id="_1-2-解析js文件"><a class="header-anchor" href="#_1-2-解析js文件" aria-hidden="true">#</a> 1.2 解析js文件</h4><p>这部分主要是获取js文件地址，并通过<code>transformModuleImports()</code>方法，将js中文件的引入方式全部转化为ESModule的引入方式。</p><div class="language-"><pre><code>else if (req.path.endsWith(&#39;.js&#39;)) {
+  const key = parseUrl(req).pathname
+  let out = await tryCache(key)
+
+  if (!out) {
+    // transform import statements
+    const result = await readSource(req)
+    out = transformModuleImports(result.source)
+    cacheData(key, out, result.updateTime)
+  }
+
+  send(res, out, &#39;application/javascript&#39;)
+}
+
+
+// 这里用了第三方库recast，是一个将文件编译成AST树的插件
+
+function transformModuleImports(code) {
+  const ast = recast.parse(code)
+  recast.types.visit(ast, {
+    visitImportDeclaration(path) {
+      const source = path.node.source.value
+      // 同时会对js中出现引入方式为非完整URL路径、且是npm包的代码进行转义成&#39;__modules/xxx&#39;
+      if (!/^./?/.test(source) &amp;&amp; isPkg(source)) {
+        path.node.source = recast.types.builders.literal(`/__modules/${source}`)
+      }
+      this.traverse(path)
+    }
+  })
+  return recast.print(ast).code
+}
+</code></pre></div><h4 id="_1-3-解析转义后的-modules"><a class="header-anchor" href="#_1-3-解析转义后的-modules" aria-hidden="true">#</a> 1.3 解析转义后的__modules</h4><p>在处理完需要转义的js包路径后，会对这部分的文件进行加载，主要是通过封装好的<code>loadPkg()</code>进行操作</p><div class="language-"><pre><code>else if (req.path.startsWith(&#39;/__modules/&#39;)) {
+  const key = parseUrl(req).pathname
+  const pkg = req.path.replace(/^/__modules//, &#39;&#39;)
+
+  let out = await tryCache(key, false) // Do not outdate modules
+  if (!out) {
+    out = (await loadPkg(pkg)).toString()
+    cacheData(key, out, false) // Do not outdate modules
+  }
+
+  send(res, out, &#39;application/javascript&#39;)
+}
+
+// 这部分逻辑中，尤大只支持加载vue
+async function loadPkg(pkg) {
+  if (pkg === &#39;vue&#39;) {
+    const dir = path.dirname(require.resolve(&#39;vue&#39;))
+    const filepath = path.join(dir, &#39;vue.esm.browser.js&#39;)
+    return readFile(filepath)
+  }
+  else {
+    // TODO
+    // check if the package has a browser es module that can be used
+    // otherwise bundle it with rollup on the fly?
+    throw new Error(&#39;npm imports support are not ready yet.&#39;)
+  }
+}
+</code></pre></div><p>通过这部分的转义，最初的<code>import Vue from &#39;vue&#39;</code>最后通过转义，加载的文件变成了vue中的<code>vue.esm.browser.js</code>文件，达到加载vue的目的</p><h4 id="_2-实时编译中变得更快"><a class="header-anchor" href="#_2-实时编译中变得更快" aria-hidden="true">#</a> 2.实时编译中变得更快</h4><p>这部分通过使用LRU缓存库，通过对加载后的文件进行缓存，在加载文件时进行文件对比，从而决定是否更新文件</p><div class="language-"><pre><code>// 初始化LRU缓存
+const LRU = require(&#39;lru-cache&#39;)
+	cache = new LRU({
+  max: 500,
+  length: function (n, key) { return n * 2 + key.length }
+})
+
+// 判断文件是否需要缓存
+async function tryCache (key, checkUpdateTime = true) {
+  // 首先检查缓存中是否有该文件
+  const data = cache.get(key)
+
+  if (checkUpdateTime) {
+    // 是否有该缓存时间
+    const cacheUpdateTime = time[key]
+    // 创建一个文件更新时间并进行对比
+    const fileUpdateTime = (await stat(path.resolve(root, key.replace(/^//, &#39;&#39;)))).mtime.getTime()
+    if (cacheUpdateTime &lt; fileUpdateTime) return null
+  }
+
+  return data
+}
+
+// 在对文件进行处理完后，都会将文件加入缓存中
+function cacheData (key, data, updateTime) {
+  	// 调用包中的方法，判断文件是否有变化
+    const old = cache.peek(key)
+    if (old != data) 
+      cache.set(key, data)
+      if (updateTime) time[key] = updateTime
+      return true
+    } else return false
+  }
+</code></pre></div><h3 id="四、总结"><a class="header-anchor" href="#四、总结" aria-hidden="true">#</a> 四、总结</h3><p>通过对这个源码的阅读，首先对vite的“急速”体验，有了基础的理解。当然vite的代码会比当前包更复杂，处理更多的情况。</p><p>在阅读完后，后续还会对vue和vite进行更深入的了解，包括：</p><ul><li><p>LRU缓存</p></li><li><p>SFC编译解析</p></li><li><p>JS文件解析成AST树</p></li></ul></div><div class="links-wrapper"><div class="prev-link"><!----></div><div class="next-link"><!----></div></div><div><footer class="page-edit"><!--[--><a href="https://juejin.cn/user/465848663286712"><img class="imgIcon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAABfVBMVEX///8Ad/8AgP8AgP8AgP8Aff8AgP8Af/8AgP8AVf8Af/8Af/8AgP8AgP8Af/8Afv8AAP8Afv8Afv8Aef8AgP8AdP8Afv8AgP8AgP8Acf8Ae/8AgP8Af/8AgP8Af/8Af/8AfP8Afv8AgP8Af/8Af/8Afv8Afv8AgP8Afv8AgP8Af/8Af/8AgP8AgP8Afv8AgP8Af/8AgP8AgP8AgP8Ae/8Afv8Af/8AgP8Af/8AgP8Af/8Af/8Aff8Af/8Abf8AgP8Af/8AgP8Af/8Af/8Afv8AgP8AgP8Afv8Afv8AgP8Af/8Aff8AgP8Afv8AgP8Aff8AgP8AfP8AgP8Ae/8AgP8Af/8AgP8AgP8AgP8Afv8AgP8AgP8AgP8Afv8AgP8AgP8AgP8AgP8AgP8Af/8AgP8Af/8Af/8Aev8Af/8AgP8Aff8Afv8AgP8AgP8AgP8Af/8AgP8Af/8Af/8AgP8Afv8AgP8AgP8AgP8AgP8Af/8AeP8Af/8Af/8Af//////rzEHnAAAAfXRSTlMAD7CCAivatxIDx5EMrP19AXdLEwgLR+6iCR/M0yLRzyFF7JupSXn8cw6v60Q0QeqzKtgeG237HMne850/6Qeq7QaZ+WdydHtj+OM3qENCMRYl1B3K2U7wnlWE/mhlirjkODa9FN/BF7/iNV/2kASNZpX1Wlf03C4stRGxgUPclqoAAAABYktHRACIBR1IAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4gEaBzgZ4yeM3AAAAT9JREFUOMvNUldbwkAQvCAqsSBoABE7asSOBRUVVBQNNuy9996789+9cMFAMHnVebmdm+/bmdtbQv4dOFOW2UjPzgFyLfo6nweKfIMOBYWwFtmMPGz2Yj2pJI0JDq3udJW6VVbmKa9I192VQFV1ktXUAl5NB0cd4KpnORqsEO2ZIRpF9gJfE9Dckqq0KuZt7UAH5+8EPF3spjsRpCeQNO/tA/qDwIDA+OCQbBoKA8NOdjMySgcZGVM6jwcgRuUiSs0nlPFNSrEpJfU0jTLD6llqbvKxei7OzvkFNQohi0vAsj81+MoqsCaoPOQFgus/1LyxichW+hS2JWCHZ7VlF9jb187pIAYcHiViHAMnp5mTjJ8B5xeEXF4B1ze/fTh/C0h398DDI9HB07O8ci+vRBdvdGnfP4gBuM8vw7X/G3wDmFhFZEdxzjMAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTgtMDEtMjZUMDc6NTY6MjUrMDE6MDA67pVWAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE4LTAxLTI2VDA3OjU2OjI1KzAxOjAwS7Mt6gAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAAWdEVYdFRpdGxlAGp1ZWppbl9sb2dvIGNvcHlxapmKAAAAV3pUWHRSYXcgcHJvZmlsZSB0eXBlIGlwdGMAAHic4/IMCHFWKCjKT8vMSeVSAAMjCy5jCxMjE0uTFAMTIESANMNkAyOzVCDL2NTIxMzEHMQHy4BIoEouAOoXEXTyQjWVAAAAAElFTkSuQmCC"></a><a href="https://www.yuque.com/shouhu-pelkv"><img class="imgIcon" src="/blog/_assets/yuque.2a316201.png"></a><!--]--></footer><p class="platform"> 以上皆为 <a href="javascript:;">瘦虎</a> 文章发布平台 </p><p class="platform"> Copyright © 2020-2021 <a href="https://github.com/gelxgx">@Gelxgx</a></p></div><!--[--><!--]--></div><!-- 只想点击背景才关闭 请使用 .self 修饰符 --><div style="display:none;" class="imgBox"><img src=""></div><!--]--></main><div class="theme-select" data-v-1eb0b654><ul data-v-1eb0b654><li class="active" data-v-1eb0b654>☀️</li><li class="" data-v-1eb0b654>🌑</li></ul></div></div><!----><!--]--></div>
+    <script>__VP_HASH_MAP__ = JSON.parse("{\"README.md\":\"56ed425b\",\"index.md\":\"1783787d\",\"more_Friendship.md\":\"0d404086\",\"more_docs.md\":\"c4c7f0eb\",\"more_index.md\":\"350c9b6f\",\"more_tags.md\":\"36c4af96\",\"docs_HTTP_HTTP.md\":\"a018e2b2\",\"docs_React_react.md\":\"3700d50c\",\"docs_TypeScript_ts-class-function.md\":\"47de5c14\",\"docs_TypeScript_ts-type-interface.md\":\"4b859e67\",\"docs_arithmetic_arithmetic.md\":\"c0bf1668\",\"docs_soundCode_co.md\":\"17fa0c9b\",\"docs_soundCode_creat-vue.md\":\"782b5c9a\",\"docs_soundCode_koa-compose.md\":\"f6f000ab\",\"docs_soundCode_mitt-tiny-emitter.md\":\"764ec47d\",\"docs_soundCode_update-notifier.md\":\"342ac959\",\"docs_soundCode_validate-npm-package-name.md\":\"b739095c\",\"docs_soundCode_vite.md\":\"947ae370\",\"docs_soundCode_vue20tools.md\":\"8cbc77c4\",\"docs_soundCode_vueDevTools.md\":\"ec3412ef\"}")</script>
+    <script type="module" async src="/blog/_assets/app.9e239910.js"></script>
+  </body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>
+      【TypeScript第二期】类、函数、泛型、枚举 | 瘦虎
+    </title>
+    <meta name="description" content="A VitePress site">
+    <link rel="stylesheet" href="/blog/_assets/style.822f840d.css">
+    <link rel="modulepreload" href="/blog/_assets/common-1984dd55.js">
+    <link rel="modulepreload" href="/blog/_assets/docs_TypeScript_ts-class-function.md.47de5c14.lean.js">
+    <link rel="modulepreload" href="/blog/_assets/app.9e239910.js">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="keywords" content="瘦虎">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="stylesheet" href="https://lib.baomitu.com/gitalk/1.7.0/gitalk.min.css">
+    <script src="https://lib.baomitu.com/gitalk/1.7.0/gitalk.min.js"></script>
+    <script src="https://lib.baomitu.com/axios/0.21.1/axios.js"></script>
+    
+  </head>
+  <body>
+    <div id="app"><!--[--><div id="containerColor" class="no-sidebar theme" data-v-1eb0b654><header class="navbar" data-v-1eb0b654><!--[--><a class="title" aria-label="瘦虎, back to home" href="/blog/"><img class="logo" src="/blog/favicon.ico" alt="logo"><span>瘦虎</span></a><div class="flex-grow"></div><nav class="nav-links hide-mobile"><!--[--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/index.html" target="" rel="">🏠 首页<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/docs.html" target="" rel="">📅 归档<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/tags.html" target="" rel="">📂 分类<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/Friendship.html" target="" rel="">👫 友情链接<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--]--><!----><!----></nav><!--[--><!--]--><!--]--><div class="sidebar-button" data-v-1eb0b654><svg class="icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z" class></path></svg></div></header><aside class="" data-v-1eb0b654><!--[--><nav class="nav-links show-mobile"><!--[--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/index.html" target="" rel="">🏠 首页<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/docs.html" target="" rel="">📅 归档<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/tags.html" target="" rel="">📂 分类<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/Friendship.html" target="" rel="">👫 友情链接<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--]--><!----><!----></nav><!--[--><!--]--><ul class="sidebar"><!--[--><!--]--></ul><!--[--><!--]--><!--]--></aside><!----><!-- TODO: make this button accessible --><div class="sidebar-mask" data-v-1eb0b654></div><main data-v-1eb0b654><!--[--><div class="content"><!--[--><!--]--><div class="md-header"><div class="md-title">【TypeScript第二期】类、函数、泛型、枚举</div><span id="jinrishici-sentence">正在加载今日诗词....</span><div class="md-date">2021-11-30</div></div><ul class="catalog"><!--[--><li class="catalog-item"><!----><a class="level level-3" href="#_1-类">1.类</a></li><li class="catalog-item"><!----><a class="level level-3" href="#"></a></li><li class="catalog-item"><!----><a class="level level-3" href="#_2-函数">2. 函数</a></li><li class="catalog-item"><!----><a class="level level-3" href="#_3-泛型">3. 泛型</a></li><li class="catalog-item"><!----><a class="level level-3" href="#-2"></a></li><li class="catalog-item"><!----><a class="level level-3" href="#-3"></a></li><li class="catalog-item"><!----><a class="level level-3" href="#_4-枚举">4.枚举</a></li><!--]--></ul><div><h3 id="_1-类"><a class="header-anchor" href="#_1-类" aria-hidden="true">#</a> 1.类</h3><p>TS中有以下这些的用法：</p><ul><li><p>public 公有，可以在任何地方被访问，默认属性</p></li><li><p>private 私有，不能被外部访问</p></li><li><p>protected 受保护的，在子类中是允许被访问的</p></li><li><p>readonly</p></li><li><p>参数属性</p></li><li><p>抽象类</p></li><li><p>类的接口</p></li></ul><h4 id="_1-1-public"><a class="header-anchor" href="#_1-1-public" aria-hidden="true">#</a> 1.1 public</h4><p>这是一个默认的修饰符，具体写法：</p><p>它可以被所有人访问和继承</p><div class="language-"><pre><code>class people {
+	public name: string;
+  public constructor(theName:string){
+  	this.name = theName;
+  }
+	public move(age: number) {
+  	console.log(`${this.name} age is ${age}`)
+  }
+}
+</code></pre></div><h4 id="_1-2-private"><a class="header-anchor" href="#_1-2-private" aria-hidden="true">#</a> 1.2 private</h4><p>当构造函数的修饰符定义为<code>private</code>时，该类不允许被继承或实例化</p><div class="language-"><pre><code>class people {
+	private name: string;
+  public constructor(theName:string){
+  	this.name = theName;
+  }
+	public move(age: number) {
+  	console.log(`${this.name} age is ${age}`)
+  }
+}
+
+new people(&#39;boy&#39;).name // error报错 是私有的，不允许访问
+</code></pre></div><h4 id="_1-3-protected"><a class="header-anchor" href="#_1-3-protected" aria-hidden="true">#</a> 1.3 protected</h4><p>我理解这是介于<code>public</code>与<code>private</code>之间的一个属性，在子类中可以访问、继承，但不能直接被实例化</p><div class="language-"><pre><code>class prople {
+    protected name: string;
+    protected constructor(theName: string) {
+      this.name = theName; 
+    }
+}
+
+class boy extends people {
+    private like: string;
+
+    constructor(name: string, like: string) {
+        super(name);
+        this.like = like;
+    }
+
+    public getLike() {
+        return `Hello, my name is ${this.name} and I like ${this.like}.`;
+    }
+}
+
+let gelx = new boy(&quot;gelx&quot;, &quot;drink&quot;);
+let girl = new people(&quot;red&quot;); // 错误: &#39;people&#39; 的构造函数是被保护的.
+</code></pre></div><h4 id="_1-4-readonly"><a class="header-anchor" href="#_1-4-readonly" aria-hidden="true">#</a> 1.4 readonly</h4><p>设置为只读属性，只读属性必须在声明时或构造函数初始化时声明参数，否则都会报错</p><div class="language-"><pre><code>class boy {
+    readonly name: string;
+    readonly age: number = 18;
+    constructor (theName: string) {
+        this.name = theName;
+    }
+}
+
+let gelx = new boy(&#39;gelx&#39;)
+gelx.age = 23; // error age是只读的
+</code></pre></div><h4 id="_1-5-参数属性"><a class="header-anchor" href="#_1-5-参数属性" aria-hidden="true">#</a> 1.5 参数属性</h4><p>以上四种属性设置时，可以使用参数属性提升代码简洁</p><p>简化一下上面的例子</p><div class="language-"><pre><code>class boy {
+  readonly age: number = 18;
+	public constructor (public name: string) {
+  
+  }
+}
+</code></pre></div><p>直接在构造方法中传入一个属性，TS会直接将其翻译成，定义一个属性-传入一个属性-属性复制</p><h4 id="_1-6-抽象类"><a class="header-anchor" href="#_1-6-抽象类" aria-hidden="true">#</a> 1.6 抽象类</h4><p>声明类前添加一个<code>abstract</code>表示该类为抽象类</p><p>抽象类不能被实例化</p><div class="language-"><pre><code>abstract class people {
+  public constructor(public name: string) {}
+  public abstract sayHi();
+}
+
+let boy = new people(&#39;gelx&#39;); // error！不能被实例化
+</code></pre></div><p>抽象类中的抽象方法必须被子类实现</p><div class="language-"><pre><code>abstract class people {
+  public name;
+  public constructor(name) {
+    this.name = name;
+  }
+  public abstract sayHi();
+}
+
+class boy extends people {
+	pubilic sayHi() {
+  	console.log(`my name is ${this.name}`)
+  }
+}
+</code></pre></div><h4 id="_1-7-类的接口使用"><a class="header-anchor" href="#_1-7-类的接口使用" aria-hidden="true">#</a> 1.7 类的接口使用</h4><p>类定义会创建两个东西：类的<strong>实例类型</strong>和一个<strong>构造函数</strong>。 因为类可以创建出实例类型，所以可以在允许使用接口的地方使用类。</p><div class="language-"><pre><code>class Point {
+    x: number;
+    y: number;
+}
+
+interface Point3d extends Point {
+    z: number;
+}
+
+let point3d: Point3d = {x: 1, y: 2, z: 3};
+</code></pre></div><h3 id=""><a class="header-anchor" href="#" aria-hidden="true">#</a></h3><h3 id="_2-函数"><a class="header-anchor" href="#_2-函数" aria-hidden="true">#</a> 2. 函数</h3><p>TS中函数有一些不一样的用法：</p><ul><li><p>表达式</p></li><li><p>用接口定义函数</p></li><li><p>可选参数、参数默认值、剩余参数</p></li><li><p>重载</p></li></ul><h4 id="_2-1-表达式"><a class="header-anchor" href="#_2-1-表达式" aria-hidden="true">#</a> 2.1 表达式</h4><p>一个正常的有输入输出的TS函数表达式：</p><div class="language-"><pre><code>function add(x:number, y:number):number {
+	return x+y;
+}
+add(2,3)
+</code></pre></div><p>如果定义一个参数为函数表达式：</p><div class="language-"><pre><code>let count = function (x:number, y:number):number {
+	return x+y;
+}
+</code></pre></div><p>当然这种写法，左边的参数无法得到校验，因此通过以下写法，使得左边参数得到校验：</p><div class="language-"><pre><code>let count(x:number, y:number) =&gt; number = function (x:number, y:number):number {
+	return x+y;
+}
+</code></pre></div><p>此时所用到的<code>=&gt;</code> 与ES6中的<code>=&gt;</code>不是同一个意思</p><p>TS类型定义中的<code>=&gt;</code>表示函数的定义，左边为输入的类型，右边为输出的类型</p><h4 id="_2-2-用接口定义函数"><a class="header-anchor" href="#_2-2-用接口定义函数" aria-hidden="true">#</a> 2.2 用接口定义函数</h4><p>定义输入类型时，可以通过接口的方式定义一个输入类型的集合</p><div class="language-"><pre><code>interface addFunc {
+	(x: number, y: number):boolean;
+}
+
+let count: addFunc =&gt; number = function (x:number, y:number):number {
+	return x+y;
+}
+</code></pre></div><h4 id="_2-3-可选参数、参数默认值、剩余参数"><a class="header-anchor" href="#_2-3-可选参数、参数默认值、剩余参数" aria-hidden="true">#</a> 2.3 可选参数、参数默认值、剩余参数</h4><h5 id="_2-3-1-可选参数"><a class="header-anchor" href="#_2-3-1-可选参数" aria-hidden="true">#</a> 2.3.1 可选参数</h5><p>函数中同样可以使用<code>？</code>表示改参数是否可选。</p><p><strong>但可选参数后不允许再出现必选参数</strong></p><hr><div class="language-"><pre><code>function consoleName(fName: string, lName?: string) {
+	if (lName) {
+        return fName + &#39; &#39; + lName;
+    } else {
+        return fName;
+    }
+}
+
+let gelx = consoleName(&#39;g&#39;,&#39;x&#39;)
+let gelx = consoleName(&#39;g&#39;)
+</code></pre></div><hr><h5 id="_2-3-2-参数默认值"><a class="header-anchor" href="#_2-3-2-参数默认值" aria-hidden="true">#</a> 2.3.2 参数默认值</h5><p>同样的，可以在传入参数时，设置一个默认值</p><div class="language-"><pre><code>function consoleName(fName: string = &#39;gelx&#39;, lName: string) {
+	if (lName) {
+        return fName + &#39; &#39; + lName;
+    } else {
+        return fName;
+    }
+}
+
+let gelx = consoleName(&#39;g&#39;,&#39;x&#39;)
+let gelx = consoleName(&#39;g&#39;)
+</code></pre></div><h5 id="_2-3-3-剩余参数"><a class="header-anchor" href="#_2-3-3-剩余参数" aria-hidden="true">#</a> 2.3.3 剩余参数</h5><p>在ES6中，如果不知道具体会传递多少参数，可以使用<code>arguments</code>获取到所有传入的参数，同样在TypeScript中，可以把这些所有参数聚集在一个变量中，并以数组的方式存储。</p><p><strong>使用时仍需要注意，聚集的参数同样也只能被放在最后使用</strong></p><div class="language-"><pre><code>function name(fName: string , ...mName: stringp[]) {
+	return `${fName} ${mName.join(&quot;&quot;)}`
+}
+</code></pre></div><h4 id="_2-4-重载"><a class="header-anchor" href="#_2-4-重载" aria-hidden="true">#</a> 2.4 重载</h4><p>允许一个函数接受不同数量或类型的参数时，作出不同的处理。当我们需要用到集合类型时，会比较体现出重载的意义</p><p>假如此时需要实现一个内容翻转的功能，可以对数字和字符串进行翻转</p><div class="language-"><pre><code>function reverse(x: number | string): number | string | void {
+    if (typeof x === &#39;number&#39;) {
+        return Number(x.toString().split(&#39;&#39;).reverse().join(&#39;&#39;));
+    } else if (typeof x === &#39;string&#39;) {
+        return x.split(&#39;&#39;).reverse().join(&#39;&#39;);
+    }
+}
+</code></pre></div><p>这么写不能够精准表达输入为数字时，输出也为数字</p><p>所以可以通过重复定义函数，并在最后一次进行函数的实现</p><div class="language-"><pre><code>function reverse(x: number): number;
+function reverse(x: string): string;
+function reverse(x: number | string): number | string | void {
+    if (typeof x === &#39;number&#39;) {
+        return Number(x.toString().split(&#39;&#39;).reverse().join(&#39;&#39;));
+    } else if (typeof x === &#39;string&#39;) {
+        return x.split(&#39;&#39;).reverse().join(&#39;&#39;);
+    }
+}
+</code></pre></div><h3 id="_3-泛型"><a class="header-anchor" href="#_3-泛型" aria-hidden="true">#</a> 3. 泛型</h3><p>泛型为了解决当我们在定义函数、接口、类时，对不确定类型的传入参数，进行类型指定和保护，确保定义、返回值的类型是统一的。</p><h4 id="_3-1-基础写法"><a class="header-anchor" href="#_3-1-基础写法" aria-hidden="true">#</a> 3.1 基础写法</h4><p>对于一个参数的写法，是下面这样的基础写法</p><div class="language-"><pre><code>function test&lt;T&gt;(name: T):T {
+	return name
+}
+</code></pre></div><p>也可以通过定义参数的方式声明泛型函数</p><div class="language-"><pre><code>let myTest: &lt;T&gt;(name: T) =&gt; T = test
+</code></pre></div><p>\</p><p>当需要定义多个类型时，同样也可以定义多个泛型：</p><div class="language-"><pre><code>function testArr&lt;T,U&gt;(arr: [T,U]):[U,T] {
+	return [arr[1], arr[0]]
+}
+</code></pre></div><h4 id="_3-2-泛型约束"><a class="header-anchor" href="#_3-2-泛型约束" aria-hidden="true">#</a> 3.2 泛型约束</h4><p>可以通过创建一个接口描述泛型的约束条件，并通过<code>extends</code>继承方式来实现约束</p><div class="language-"><pre><code>interface Lengthwise {
+	length: number
+}
+function cLength&lt;T extends Lengthwise&gt;(num: T): T {
+	console.log(num.length)
+}
+
+cLength({length:10, value: 3})
+</code></pre></div><p>由于使用了<code>extends</code>约束泛型<code>T</code>必须符合接口 Lengthwise 的形状，所以传入的参数必须包含 <code>length</code> 属性</p><p>同样可以实现多个参数的相互约束</p><div class="language-"><pre><code>function getProperty(obj: T, key: K) {
+    return obj[key];
+}
+
+let x = { a: 1, b: 2, c: 3, d: 4 };
+getProperty(x, &quot;a&quot;)
+</code></pre></div><h4 id="_3-3-泛型类"><a class="header-anchor" href="#_3-3-泛型类" aria-hidden="true">#</a> 3.3 泛型类</h4><p>同样泛型可以在类中进行定义</p><div class="language-"><pre><code>class GenericNumber&lt;T&gt; {
+    zeroValue: T;
+    add: (x: T, y: T) =&gt; T;
+}
+
+let myGenericNumber = new GenericNumber&lt;number&gt;();
+myGenericNumber.zeroValue = 0;
+myGenericNumber.add = function(x, y) { return x + y; };
+</code></pre></div><h3 id="-2"><a class="header-anchor" href="#-2" aria-hidden="true">#</a></h3><h3 id="-3"><a class="header-anchor" href="#-3" aria-hidden="true">#</a></h3><h3 id="_4-枚举"><a class="header-anchor" href="#_4-枚举" aria-hidden="true">#</a> 4.枚举</h3><p>枚举又被分为四类：</p><ul><li>数字枚举</li><li>字符串枚举</li></ul><!----><ul><li>常数枚举</li><li>外部枚举</li></ul><h4 id="_4-1-数字枚举"><a class="header-anchor" href="#_4-1-数字枚举" aria-hidden="true">#</a> 4.1 数字枚举</h4><p>通过使用<code>enum</code>定义一个枚举</p><div class="language-"><pre><code>enum Direction {
+    Up,
+    Down,
+    Left,
+    Right
+}
+</code></pre></div><p>访问枚举时，可以通过枚举的属性、名字来访问枚举类型</p><h5 id="_4-2-字符串枚举"><a class="header-anchor" href="#_4-2-字符串枚举" aria-hidden="true">#</a> 4.2 字符串枚举</h5><div class="language-"><pre><code>enum Direction {
+    Up = &quot;UP&quot;,
+    Down = &quot;DOWN&quot;,
+    Left = &quot;LEFT&quot;,
+    Right = &quot;RIGHT&quot;,
+}
+</code></pre></div><p>\</p><h4 id="_4-3-常数枚举"><a class="header-anchor" href="#_4-3-常数枚举" aria-hidden="true">#</a> 4.3 常数枚举</h4><p>使用<code>const enum</code>代表常数枚举，常数枚举与普通枚举的区别是，它会在编译阶段被删除，并且不能包含计算成员</p><div class="language-"><pre><code>const enum Directions {
+    Up,
+    Down,
+    Left,
+    Right
+}
+</code></pre></div><h4 id="-4"><a class="header-anchor" href="#-4" aria-hidden="true">#</a></h4><h4 id="_4-4-外部枚举"><a class="header-anchor" href="#_4-4-外部枚举" aria-hidden="true">#</a> 4.4 外部枚举</h4><p>使用<code>declare</code>定义外部枚举，它只会用于编译时的检查，编译结果中会被删除</p><div class="language-"><pre><code>declare enum Directions {
+    Up,
+    Down,
+    Left,
+    Right
+}
+</code></pre></div></div><div class="links-wrapper"><div class="prev-link"><!----></div><div class="next-link"><!----></div></div><div><footer class="page-edit"><!--[--><a href="https://juejin.cn/user/465848663286712"><img class="imgIcon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAABfVBMVEX///8Ad/8AgP8AgP8AgP8Aff8AgP8Af/8AgP8AVf8Af/8Af/8AgP8AgP8Af/8Afv8AAP8Afv8Afv8Aef8AgP8AdP8Afv8AgP8AgP8Acf8Ae/8AgP8Af/8AgP8Af/8Af/8AfP8Afv8AgP8Af/8Af/8Afv8Afv8AgP8Afv8AgP8Af/8Af/8AgP8AgP8Afv8AgP8Af/8AgP8AgP8AgP8Ae/8Afv8Af/8AgP8Af/8AgP8Af/8Af/8Aff8Af/8Abf8AgP8Af/8AgP8Af/8Af/8Afv8AgP8AgP8Afv8Afv8AgP8Af/8Aff8AgP8Afv8AgP8Aff8AgP8AfP8AgP8Ae/8AgP8Af/8AgP8AgP8AgP8Afv8AgP8AgP8AgP8Afv8AgP8AgP8AgP8AgP8AgP8Af/8AgP8Af/8Af/8Aev8Af/8AgP8Aff8Afv8AgP8AgP8AgP8Af/8AgP8Af/8Af/8AgP8Afv8AgP8AgP8AgP8AgP8Af/8AeP8Af/8Af/8Af//////rzEHnAAAAfXRSTlMAD7CCAivatxIDx5EMrP19AXdLEwgLR+6iCR/M0yLRzyFF7JupSXn8cw6v60Q0QeqzKtgeG237HMne850/6Qeq7QaZ+WdydHtj+OM3qENCMRYl1B3K2U7wnlWE/mhlirjkODa9FN/BF7/iNV/2kASNZpX1Wlf03C4stRGxgUPclqoAAAABYktHRACIBR1IAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4gEaBzgZ4yeM3AAAAT9JREFUOMvNUldbwkAQvCAqsSBoABE7asSOBRUVVBQNNuy9996789+9cMFAMHnVebmdm+/bmdtbQv4dOFOW2UjPzgFyLfo6nweKfIMOBYWwFtmMPGz2Yj2pJI0JDq3udJW6VVbmKa9I192VQFV1ktXUAl5NB0cd4KpnORqsEO2ZIRpF9gJfE9Dckqq0KuZt7UAH5+8EPF3spjsRpCeQNO/tA/qDwIDA+OCQbBoKA8NOdjMySgcZGVM6jwcgRuUiSs0nlPFNSrEpJfU0jTLD6llqbvKxei7OzvkFNQohi0vAsj81+MoqsCaoPOQFgus/1LyxichW+hS2JWCHZ7VlF9jb187pIAYcHiViHAMnp5mTjJ8B5xeEXF4B1ze/fTh/C0h398DDI9HB07O8ci+vRBdvdGnfP4gBuM8vw7X/G3wDmFhFZEdxzjMAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTgtMDEtMjZUMDc6NTY6MjUrMDE6MDA67pVWAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE4LTAxLTI2VDA3OjU2OjI1KzAxOjAwS7Mt6gAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAAWdEVYdFRpdGxlAGp1ZWppbl9sb2dvIGNvcHlxapmKAAAAV3pUWHRSYXcgcHJvZmlsZSB0eXBlIGlwdGMAAHic4/IMCHFWKCjKT8vMSeVSAAMjCy5jCxMjE0uTFAMTIESANMNkAyOzVCDL2NTIxMzEHMQHy4BIoEouAOoXEXTyQjWVAAAAAElFTkSuQmCC"></a><a href="https://www.yuque.com/shouhu-pelkv"><img class="imgIcon" src="/blog/_assets/yuque.2a316201.png"></a><!--]--></footer><p class="platform"> 以上皆为 <a href="javascript:;">瘦虎</a> 文章发布平台 </p><p class="platform"> Copyright © 2020-2021 <a href="https://github.com/gelxgx">@Gelxgx</a></p></div><!--[--><!--]--></div><!-- 只想点击背景才关闭 请使用 .self 修饰符 --><div style="display:none;" class="imgBox"><img src=""></div><!--]--></main><div class="theme-select" data-v-1eb0b654><ul data-v-1eb0b654><li class="active" data-v-1eb0b654>☀️</li><li class="" data-v-1eb0b654>🌑</li></ul></div></div><!----><!--]--></div>
+    <script>__VP_HASH_MAP__ = JSON.parse("{\"README.md\":\"56ed425b\",\"index.md\":\"1783787d\",\"more_Friendship.md\":\"0d404086\",\"more_docs.md\":\"c4c7f0eb\",\"more_index.md\":\"350c9b6f\",\"more_tags.md\":\"36c4af96\",\"docs_HTTP_HTTP.md\":\"a018e2b2\",\"docs_React_react.md\":\"3700d50c\",\"docs_TypeScript_ts-class-function.md\":\"47de5c14\",\"docs_TypeScript_ts-type-interface.md\":\"4b859e67\",\"docs_arithmetic_arithmetic.md\":\"c0bf1668\",\"docs_soundCode_co.md\":\"17fa0c9b\",\"docs_soundCode_creat-vue.md\":\"782b5c9a\",\"docs_soundCode_koa-compose.md\":\"f6f000ab\",\"docs_soundCode_mitt-tiny-emitter.md\":\"764ec47d\",\"docs_soundCode_update-notifier.md\":\"342ac959\",\"docs_soundCode_validate-npm-package-name.md\":\"b739095c\",\"docs_soundCode_vite.md\":\"947ae370\",\"docs_soundCode_vue20tools.md\":\"8cbc77c4\",\"docs_soundCode_vueDevTools.md\":\"ec3412ef\"}")</script>
+    <script type="module" async src="/blog/_assets/app.9e239910.js"></script>
+  </body>
+</html>

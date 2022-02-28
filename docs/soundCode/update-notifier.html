@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>
+      【源码第五期】分析update-notifier | 瘦虎
+    </title>
+    <meta name="description" content="A VitePress site">
+    <link rel="stylesheet" href="/blog/_assets/style.822f840d.css">
+    <link rel="modulepreload" href="/blog/_assets/common-1984dd55.js">
+    <link rel="modulepreload" href="/blog/_assets/docs_soundCode_update-notifier.md.342ac959.lean.js">
+    <link rel="modulepreload" href="/blog/_assets/app.9e239910.js">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="keywords" content="瘦虎">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="stylesheet" href="https://lib.baomitu.com/gitalk/1.7.0/gitalk.min.css">
+    <script src="https://lib.baomitu.com/gitalk/1.7.0/gitalk.min.js"></script>
+    <script src="https://lib.baomitu.com/axios/0.21.1/axios.js"></script>
+    
+  </head>
+  <body>
+    <div id="app"><!--[--><div id="containerColor" class="no-sidebar theme" data-v-1eb0b654><header class="navbar" data-v-1eb0b654><!--[--><a class="title" aria-label="瘦虎, back to home" href="/blog/"><img class="logo" src="/blog/favicon.ico" alt="logo"><span>瘦虎</span></a><div class="flex-grow"></div><nav class="nav-links hide-mobile"><!--[--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/index.html" target="" rel="">🏠 首页<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/docs.html" target="" rel="">📅 归档<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/tags.html" target="" rel="">📂 分类<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/Friendship.html" target="" rel="">👫 友情链接<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--]--><!----><!----></nav><!--[--><!--]--><!--]--><div class="sidebar-button" data-v-1eb0b654><svg class="icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z" class></path></svg></div></header><aside class="" data-v-1eb0b654><!--[--><nav class="nav-links show-mobile"><!--[--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/index.html" target="" rel="">🏠 首页<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/docs.html" target="" rel="">📅 归档<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/tags.html" target="" rel="">📂 分类<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--[--><div class="nav-item"><a class="nav-link" href="/blog/more/Friendship.html" target="" rel="">👫 友情链接<!-- <OutboundLink v-if="isExternalLink" /> --></a></div><!--]--><!--]--><!----><!----></nav><!--[--><!--]--><ul class="sidebar"><!--[--><!--]--></ul><!--[--><!--]--><!--]--></aside><!----><!-- TODO: make this button accessible --><div class="sidebar-mask" data-v-1eb0b654></div><main data-v-1eb0b654><!--[--><div class="content"><!--[--><!--]--><div class="md-header"><div class="md-title">【源码第五期】分析update-notifier</div><span id="jinrishici-sentence">正在加载今日诗词....</span><div class="md-date">2021-11-10</div></div><ul class="catalog"><!--[--><li class="catalog-item"><!----><a class="level level-3" href="#_1-阅读前准备">1.阅读前准备</a></li><li class="catalog-item"><!----><a class="level level-3" href="#_2-源码地址">2.源码地址</a></li><li class="catalog-item"><!----><a class="level level-3" href="#_3-开始阅读">3.开始阅读</a></li><li class="catalog-item"><!----><a class="level level-3" href="#"></a></li><li class="catalog-item"><!----><a class="level level-3" href="#_4-总结">4.总结</a></li><!--]--></ul><div><h3 id="_1-阅读前准备"><a class="header-anchor" href="#_1-阅读前准备" aria-hidden="true">#</a> 1.阅读前准备</h3><p>曾经<code>npm install</code>之后会发现会自动弹出npm依赖包升级的页面<img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/fb24bef414364c2fbd3943aa7fb25e87~tplv-k3u1fbpfcp-zoom-1.image" alt=""></p><p>现在就来研究下到底是怎么做到的</p><h3 id="_2-源码地址"><a class="header-anchor" href="#_2-源码地址" aria-hidden="true">#</a> 2.源码地址</h3><p><a href="https://github.com/yeoman/update-notifier" target="_blank" rel="noopener noreferrer">https://github.com/yeoman/update-notifier</a></p><h3 id="_3-开始阅读"><a class="header-anchor" href="#_3-开始阅读" aria-hidden="true">#</a> 3.开始阅读</h3><p><code>UpdateNotifier</code>构造函数中，分为三部分函数：check()检查函数；fetchInfo获取信息函数；notify通知函数</p><p>整个代码中引用了很多第三方库</p><p>先从<code>UpdateNotifier</code>构造函数入手</p><h4 id="_3-1-构造函数"><a class="header-anchor" href="#_3-1-构造函数" aria-hidden="true">#</a> 3.1 构造函数</h4><div class="language-"><pre><code>constructor(options = {}) {
+  	// 主要是对传入的options对象中的参数进行校验
+		this.options = options;
+		options.pkg = options.pkg || {};
+		options.distTag = options.distTag || &#39;latest&#39;;
+
+		// Reduce pkg to the essential keys. with fallback to deprecated options
+		// TODO: Remove deprecated options at some point far into the future
+		options.pkg = {
+			name: options.pkg.name || options.packageName,
+			version: options.pkg.version || options.packageVersion
+		};
+		// 如果缺少必要 则抛出异常
+		if (!options.pkg.name || !options.pkg.version) {
+			throw new Error(&#39;pkg.name and pkg.version required&#39;);
+		}
+
+		this.packageName = options.pkg.name;
+		this.packageVersion = options.pkg.version;
+  	// 检查传入的时间戳，如果不是时间则采用默认时间戳
+		this.updateCheckInterval = typeof options.updateCheckInterval === &#39;number&#39; ? options.updateCheckInterval : ONE_DAY;
+		this.disabled = &#39;NO_UPDATE_NOTIFIER&#39; in process.env ||
+			process.env.NODE_ENV === &#39;test&#39; ||
+			process.argv.includes(&#39;--no-update-notifier&#39;) ||
+			isCi();
+		this.shouldNotifyInNpmScript = options.shouldNotifyInNpmScript;
+
+		if (!this.disabled) {
+			try {
+				const ConfigStore = configstore();
+				this.config = new ConfigStore(`update-notifier-${this.packageName}`, {
+					optOut: false,
+					// Init with the current time so the first check is only
+					// after the set interval, so not to bother users right away
+					lastUpdateCheck: Date.now()
+				});
+			} catch {
+				// Expecting error code EACCES or EPERM
+				const message =
+					chalk().yellow(format(&#39; %s update check failed &#39;, options.pkg.name)) +
+					format(&#39;\n Try running with %s or get access &#39;, chalk().cyan(&#39;sudo&#39;)) +
+					&#39;\n to the local update config store via \n&#39; +
+					chalk().cyan(format(&#39; sudo chown -R $USER:$(id -gn $USER) %s &#39;, xdgBasedir().config));
+
+				process.on(&#39;exit&#39;, () =&gt; {
+					console.error(boxen()(message, {align: &#39;center&#39;}));
+				});
+			}
+		}
+	}
+</code></pre></div><h4 id="_3-2-check检查函数"><a class="header-anchor" href="#_3-2-check检查函数" aria-hidden="true">#</a> 3.2 check检查函数</h4><div class="language-"><pre><code>check() {
+  	// 如果出现以下几种情况时，则直接退出
+		if (
+			!this.config ||
+			this.config.get(&#39;optOut&#39;) ||
+			this.disabled
+		) {
+			return;
+		}
+		// 获取包更新信息（第一次获取的时候为undefined）
+		this.update = this.config.get(&#39;update&#39;);
+		
+		if (this.update) {
+			// 如果存在，则赋值最新版本
+			this.update.current = this.packageVersion;
+
+			// 并清理缓存
+			this.config.delete(&#39;update&#39;);
+		}
+
+		// 如果最后一次获取更新的时间小于用户设置的检查时间 则直接退出
+		if (Date.now() - this.config.get(&#39;lastUpdateCheck&#39;) &lt; this.updateCheckInterval) {
+			return;
+		}
+
+		// 调用子进程执行check文件
+  	// 这里的unref 方法用于断绝与父进程的关系，父进程退出不会造成子进程的退出
+		spawn(process.execPath, [path.join(__dirname, &#39;check.js&#39;), JSON.stringify(this.options)], {
+			detached: true,
+			stdio: &#39;ignore&#39;
+		}).unref();
+	}
+</code></pre></div><p>在进行check函数的执行后，会进入check.js文件的执行，进一步看check.js中又发生了什么</p><div class="language-"><pre><code>let updateNotifier = require(&#39;.&#39;);
+
+const options = JSON.parse(process.argv[2]);
+
+updateNotifier = new updateNotifier.UpdateNotifier(options);
+
+(async () =&gt; {
+	setTimeout(process.exit, 1000 * 30);
+	// 在这里继续调用updateNotifier中的获取数据的方法
+	const update = await updateNotifier.fetchInfo();
+
+	// 并更新最后更新检查时间的时间字段
+	updateNotifier.config.set(&#39;lastUpdateCheck&#39;, Date.now());
+	// 如果此时时间不是最新，则会更新为最新
+	if (update.type &amp;&amp; update.type !== &#39;latest&#39;) {
+		updateNotifier.config.set(&#39;update&#39;, update);
+	}
+
+	// Call process exit explicitly to terminate the child process,
+	// otherwise the child process will run forever, according to the Node.js docs
+	process.exit();
+})().catch(error =&gt; {
+	console.error(error);
+	process.exit(1);
+});
+</code></pre></div><p>check.js这里主要为开启子进程，获取最新版本信息的步骤，执行完成后将退出子进程</p><h4 id="_3-3-fetchinfo-获取信息函数"><a class="header-anchor" href="#_3-3-fetchinfo-获取信息函数" aria-hidden="true">#</a> 3.3 fetchInfo()获取信息函数</h4><div class="language-"><pre><code>async fetchInfo() {
+  const {distTag} = this.options;
+  // 这里主要通过懒加载的方式执行获取包信息的步骤
+  const latest = await latestVersion()(this.packageName, {version: distTag});
+
+  return {
+    latest,
+    current: this.packageVersion,
+    // 这里会做信息的diff
+    type: semverDiff()(this.packageVersion, latest) || distTag,
+    name: this.packageName
+  };
+}
+</code></pre></div><h4 id="_3-4-notify-通知函数"><a class="header-anchor" href="#_3-4-notify-通知函数" aria-hidden="true">#</a> 3.4 notify()通知函数</h4><div class="language-"><pre><code>	notify(options) {
+		const suppressForNpm = !this.shouldNotifyInNpmScript &amp;&amp; isNpm().isNpmOrYarn;
+		if (!process.stdout.isTTY || suppressForNpm || !this.update || !semver().gt(this.update.latest, this.update.current)) {
+			return this;
+		}
+
+		options = {
+      // 是否为全局安装
+			isGlobal: isInstalledGlobally(),
+      // 是否为yarn全局安装
+			isYarnGlobal: isYarnGlobal()(),
+			...options
+		};
+
+		let installCommand;
+    // 根据yarn和npm的判断 展示不同的命令指示符给用户
+		if (options.isYarnGlobal) {
+			installCommand = `yarn global add ${this.packageName}`;
+		} else if (options.isGlobal) {
+			installCommand = `npm i -g ${this.packageName}`;
+		} else if (hasYarn()()) {
+			installCommand = `yarn add ${this.packageName}`;
+		} else {
+			installCommand = `npm i ${this.packageName}`;
+		}
+
+		const defaultTemplate = &#39;Update available &#39; +
+			chalk().dim(&#39;{currentVersion}&#39;) +
+			chalk().reset(&#39; → &#39;) +
+			chalk().green(&#39;{latestVersion}&#39;) +
+			&#39; \nRun &#39; + chalk().cyan(&#39;{updateCommand}&#39;) + &#39; to update&#39;;
+		
+		const template = options.message || defaultTemplate;
+
+		options.boxenOptions = options.boxenOptions || {
+			padding: 1,
+			margin: 1,
+			align: &#39;center&#39;,
+			borderColor: &#39;yellow&#39;,
+			borderStyle: &#39;round&#39;
+		};
+
+		const message = boxen()(
+			pupa()(template, {
+				packageName: this.packageName,
+				currentVersion: this.update.current,
+				latestVersion: this.update.latest,
+				updateCommand: installCommand
+			}),
+			options.boxenOptions
+		);
+
+		if (options.defer === false) {
+			console.error(message);
+		} else {
+			process.on(&#39;exit&#39;, () =&gt; {
+				console.error(message);
+			});
+
+			process.on(&#39;SIGINT&#39;, () =&gt; {
+				console.error(&#39;&#39;);
+				process.exit();
+			});
+		}
+
+		return this;
+	}
+</code></pre></div><h3 id=""><a class="header-anchor" href="#" aria-hidden="true">#</a></h3><h3 id="_4-总结"><a class="header-anchor" href="#_4-总结" aria-hidden="true">#</a> 4.总结</h3><p>整个过程比较简单，主体就为updateNotifier构造函数，其中执行的步骤为：</p><ul><li>new了一个updateNotifier对象</li><li>执行check()函数</li></ul><!----><ul><li><ul><li>判断是否需要执行check.js</li></ul></li></ul><!----><ul><li>执行fetchInfo()函数获取信息</li><li>set(&#39;lastUpdateCheck&#39;)设置最后获取更新的时间</li></ul><!----><ul><li>set(&#39;update&#39;)设置一个需要更新的列表</li><li>notify()函数，展示给用户目前可更新的依赖包，并根据包类型展示命令符</li></ul></div><div class="links-wrapper"><div class="prev-link"><!----></div><div class="next-link"><!----></div></div><div><footer class="page-edit"><!--[--><a href="https://juejin.cn/user/465848663286712"><img class="imgIcon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAABfVBMVEX///8Ad/8AgP8AgP8AgP8Aff8AgP8Af/8AgP8AVf8Af/8Af/8AgP8AgP8Af/8Afv8AAP8Afv8Afv8Aef8AgP8AdP8Afv8AgP8AgP8Acf8Ae/8AgP8Af/8AgP8Af/8Af/8AfP8Afv8AgP8Af/8Af/8Afv8Afv8AgP8Afv8AgP8Af/8Af/8AgP8AgP8Afv8AgP8Af/8AgP8AgP8AgP8Ae/8Afv8Af/8AgP8Af/8AgP8Af/8Af/8Aff8Af/8Abf8AgP8Af/8AgP8Af/8Af/8Afv8AgP8AgP8Afv8Afv8AgP8Af/8Aff8AgP8Afv8AgP8Aff8AgP8AfP8AgP8Ae/8AgP8Af/8AgP8AgP8AgP8Afv8AgP8AgP8AgP8Afv8AgP8AgP8AgP8AgP8AgP8Af/8AgP8Af/8Af/8Aev8Af/8AgP8Aff8Afv8AgP8AgP8AgP8Af/8AgP8Af/8Af/8AgP8Afv8AgP8AgP8AgP8AgP8Af/8AeP8Af/8Af/8Af//////rzEHnAAAAfXRSTlMAD7CCAivatxIDx5EMrP19AXdLEwgLR+6iCR/M0yLRzyFF7JupSXn8cw6v60Q0QeqzKtgeG237HMne850/6Qeq7QaZ+WdydHtj+OM3qENCMRYl1B3K2U7wnlWE/mhlirjkODa9FN/BF7/iNV/2kASNZpX1Wlf03C4stRGxgUPclqoAAAABYktHRACIBR1IAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4gEaBzgZ4yeM3AAAAT9JREFUOMvNUldbwkAQvCAqsSBoABE7asSOBRUVVBQNNuy9996789+9cMFAMHnVebmdm+/bmdtbQv4dOFOW2UjPzgFyLfo6nweKfIMOBYWwFtmMPGz2Yj2pJI0JDq3udJW6VVbmKa9I192VQFV1ktXUAl5NB0cd4KpnORqsEO2ZIRpF9gJfE9Dckqq0KuZt7UAH5+8EPF3spjsRpCeQNO/tA/qDwIDA+OCQbBoKA8NOdjMySgcZGVM6jwcgRuUiSs0nlPFNSrEpJfU0jTLD6llqbvKxei7OzvkFNQohi0vAsj81+MoqsCaoPOQFgus/1LyxichW+hS2JWCHZ7VlF9jb187pIAYcHiViHAMnp5mTjJ8B5xeEXF4B1ze/fTh/C0h398DDI9HB07O8ci+vRBdvdGnfP4gBuM8vw7X/G3wDmFhFZEdxzjMAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTgtMDEtMjZUMDc6NTY6MjUrMDE6MDA67pVWAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE4LTAxLTI2VDA3OjU2OjI1KzAxOjAwS7Mt6gAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAAWdEVYdFRpdGxlAGp1ZWppbl9sb2dvIGNvcHlxapmKAAAAV3pUWHRSYXcgcHJvZmlsZSB0eXBlIGlwdGMAAHic4/IMCHFWKCjKT8vMSeVSAAMjCy5jCxMjE0uTFAMTIESANMNkAyOzVCDL2NTIxMzEHMQHy4BIoEouAOoXEXTyQjWVAAAAAElFTkSuQmCC"></a><a href="https://www.yuque.com/shouhu-pelkv"><img class="imgIcon" src="/blog/_assets/yuque.2a316201.png"></a><!--]--></footer><p class="platform"> 以上皆为 <a href="javascript:;">瘦虎</a> 文章发布平台 </p><p class="platform"> Copyright © 2020-2021 <a href="https://github.com/gelxgx">@Gelxgx</a></p></div><!--[--><!--]--></div><!-- 只想点击背景才关闭 请使用 .self 修饰符 --><div style="display:none;" class="imgBox"><img src=""></div><!--]--></main><div class="theme-select" data-v-1eb0b654><ul data-v-1eb0b654><li class="active" data-v-1eb0b654>☀️</li><li class="" data-v-1eb0b654>🌑</li></ul></div></div><!----><!--]--></div>
+    <script>__VP_HASH_MAP__ = JSON.parse("{\"README.md\":\"56ed425b\",\"index.md\":\"1783787d\",\"more_Friendship.md\":\"0d404086\",\"more_docs.md\":\"c4c7f0eb\",\"more_index.md\":\"350c9b6f\",\"more_tags.md\":\"36c4af96\",\"docs_HTTP_HTTP.md\":\"a018e2b2\",\"docs_React_react.md\":\"3700d50c\",\"docs_TypeScript_ts-class-function.md\":\"47de5c14\",\"docs_TypeScript_ts-type-interface.md\":\"4b859e67\",\"docs_arithmetic_arithmetic.md\":\"c0bf1668\",\"docs_soundCode_co.md\":\"17fa0c9b\",\"docs_soundCode_creat-vue.md\":\"782b5c9a\",\"docs_soundCode_koa-compose.md\":\"f6f000ab\",\"docs_soundCode_mitt-tiny-emitter.md\":\"764ec47d\",\"docs_soundCode_update-notifier.md\":\"342ac959\",\"docs_soundCode_validate-npm-package-name.md\":\"b739095c\",\"docs_soundCode_vite.md\":\"947ae370\",\"docs_soundCode_vue20tools.md\":\"8cbc77c4\",\"docs_soundCode_vueDevTools.md\":\"ec3412ef\"}")</script>
+    <script type="module" async src="/blog/_assets/app.9e239910.js"></script>
+  </body>
+</html>
